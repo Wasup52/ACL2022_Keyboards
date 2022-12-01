@@ -34,6 +34,7 @@ public class RunGame implements Game {
 	
 	int keyCooldown = Global.KEY_COOLDOWN;
 
+	boolean isFinished = false;
 	boolean inventoryOpen = false;
 	
 	Player player = new Player(tileManager.mapTiles);
@@ -103,13 +104,13 @@ public class RunGame implements Game {
 
 			if (commands.get("ATTACK")) {
 				player.isAttacking = true;
-				System.out.println("Player is attacking");
+				// System.out.println("Player is attacking");
 			}
 
-			if(player.isAttacking) {
+			if (player.isAttacking) {
 				for (Mob mob : mobs) {
 					if (player.canAttack(mob)) {
-						System.out.println("inAttackRange");
+						System.out.println(mob + " attacked");
 						player.attack(mob);
 					}
 				}
@@ -125,6 +126,9 @@ public class RunGame implements Game {
 							if (entity instanceof Chest) {
 								((Chest) entity).open();
 								inventoryOpen = true;
+							}
+							if (entity instanceof Treasure) {
+								isFinished = true;
 							}
 						}
 					}
@@ -164,8 +168,10 @@ public class RunGame implements Game {
 			}
 		}
 		
-		zombie.moveTowards(player);
-		if (zombie.collidesWith(player)) {
+		if (!zombie.isDead()) {
+			zombie.moveTowards(player);
+		}
+		if (zombie.canAttack(player)) {
 			zombie.attack(player);
 		}
 		// ghost.moveTowards(player);
@@ -179,7 +185,9 @@ public class RunGame implements Game {
 	 */
 	@Override
 	public boolean isFinished() {
-		// le jeu n'est jamais fini
-		return false;
+		if (isFinished) {
+			System.out.println("Game finished");
+		}
+		return isFinished;
 	}
 }

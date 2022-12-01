@@ -165,6 +165,8 @@ public abstract class Mob extends Character{
             if (dy < 0) {
                 moveUp();
             }
+        } else {
+            direction = lastDirection + IDLE;
         }
     }
 

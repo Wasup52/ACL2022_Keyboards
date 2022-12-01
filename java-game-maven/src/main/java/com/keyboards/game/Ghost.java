@@ -18,14 +18,21 @@ public class Ghost extends Mob {
     }
 
     protected void initStats() {
-        health = 100;
-        attackDamage = 4;
+        health = 10;
+        attackDamage = 2;
         speed = 6;
+        attackCooldownMax = 20;
     }
 
     protected void initHitBox() {
         hitBoxCornersOffset = new Point(0, 0);
         hitbox = new Rectangle(position.x + hitBoxCornersOffset.x, position.y + hitBoxCornersOffset.y, 32, 32);
+
+        attackLeftHitBoxCornersOffset = new Point(0, 0);
+        attackLeftHitbox = new Rectangle(position.x + attackLeftHitBoxCornersOffset.x, position.y + attackLeftHitBoxCornersOffset.y, 32, 32);
+        
+        attackRightHitBoxCornersOffset = new Point(0, 0);
+        attackRightHitbox = new Rectangle(position.x + attackRightHitBoxCornersOffset.x, position.y + attackRightHitBoxCornersOffset.y, 32, 32);
     }
 
     protected void initSolidBox() {

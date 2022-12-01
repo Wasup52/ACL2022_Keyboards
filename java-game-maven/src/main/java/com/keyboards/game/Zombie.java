@@ -73,6 +73,7 @@ public class Zombie extends Mob {
         walkRight = walkRightSheet.getSpriteArray();
         attackRight = attackRightSheet.getSpriteArray();
         attackLeft = attackLeftSheet.getSpriteArray();
+
     }
 
     protected void die() {

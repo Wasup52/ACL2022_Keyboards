@@ -16,7 +16,9 @@ public abstract class Character extends Entity{
 	public boolean isSprinting = false;
 	
     public boolean isAttacking = false;
-
+	
+	int attackCooldownMax;
+	int attackCooldown;
 
 	public Tile[][] mapTiles;
 
@@ -289,31 +291,45 @@ public abstract class Character extends Entity{
 		direction = lastDirection + IDLE;
 	}
 
-
 	/**
 	 * Attack the given character
 	 */
 	public void attack(Character character) {
-		character.health -= attackDamage;
-		if (character.health <= 0) {
-			character.die();
+		attackCooldown = attackCooldownMax;
+
+		if (character.health > 0) {
+			character.health -= attackDamage;
+			if (character.health <= 0) {
+				character.die();
+			}
+		} else {
+			System.out.println(character + " is already dead");
 		}
-		System.out.println(this + " attacked " + character + " with damage: " + attackDamage + ", character health: " + character.health);
+		// System.out.println(this + " attacked " + character + " with damage: " + attackDamage + ", character health: " + character.health);
     }
 	
 	public boolean canAttack(Character character){
-		if (direction == LEFT || lastDirection == LEFT) {
-			return attackLeftHitbox.intersects(character.hitbox);
-		}
-		if (direction == RIGHT || lastDirection == RIGHT) {
-			return attackRightHitbox.intersects(character.hitbox);
+		if (attackCooldown <= 0) {
+			if (direction == LEFT || lastDirection == LEFT) {
+				return attackLeftHitbox.intersects(character.hitbox);
+			}
+			if (direction == RIGHT || lastDirection == RIGHT) {
+				return attackRightHitbox.intersects(character.hitbox);
+			}
+			return false;
 		}
 		return false;
 	}
 	
 	protected abstract void die();
 
+	public boolean isDead() {
+		return health <= 0;
+	}
+
 	public void draw(Graphics2D g) {
+		attackCooldown--;
+
         if (Global.DEBUG) {
             // fill suronding squares with semi transparent yellow
             /*

@@ -15,13 +15,7 @@ public class Player extends Character {
 
     public final int NUMBER_OF_FRAME_IN_WALK_ANIM = 6;
     public final int NUMBER_OF_FRAME_IN_ATTACK_ANIM = 4;
-    		
-    public final int RIGHT = 0;
-    public final int LEFT = 1;
-    public final int IDLE = 2;
-    // public final int UP = 2;
-    // public final int DOWN = 3;
-    // public final int IDLE = 4;
+
     public boolean isAttacking = false;
 
     private Sprite[] idleLeft;
@@ -32,10 +26,12 @@ public class Player extends Character {
     private Sprite[] attackRight;
     
     public int spriteNum = 0;
-    public int spriteAttack=0;
+    public int spriteAttack = 0;
     public int spriteCounter = 0;
     
-    public final int maxHealth = 50;
+    private final int SCALE_FACTOR = 2;
+
+    public final int maxHealth = 12;
 
     public Player(int col, int row, Tile[][] mapTiles) {
         super(col, row, mapTiles);
@@ -48,26 +44,26 @@ public class Player extends Character {
     protected void initStats() {
         hasInventory = true;
         health = maxHealth;
-        attackDamage = 25;
+        attackDamage = 3;
         speed = 1;
         sprintSpeed = 2;
+        attackCooldownMax = 25;
     }
 
     public void initHitBox() {
-        hitBoxCornersOffset = new Point(16*2, 13*2);
-        hitbox = new Rectangle(position.x + hitBoxCornersOffset.x, position.y + hitBoxCornersOffset.y, 15*2, 20*2);
+        hitBoxCornersOffset = new Point(16*SCALE_FACTOR, 13*SCALE_FACTOR);
+        hitbox = new Rectangle(position.x + hitBoxCornersOffset.x, position.y + hitBoxCornersOffset.y, 15*SCALE_FACTOR, 20*SCALE_FACTOR);
 
-        attackLeftHitBoxCornersOffset = new Point(4*2,15*2);
-        attackLeftHitbox = new Rectangle(position.x + attackLeftHitBoxCornersOffset.x, position.y + attackLeftHitBoxCornersOffset.y, 17*2, 21*2);
+        attackLeftHitBoxCornersOffset = new Point(4*SCALE_FACTOR,15*SCALE_FACTOR);
+        attackLeftHitbox = new Rectangle(position.x + attackLeftHitBoxCornersOffset.x, position.y + attackLeftHitBoxCornersOffset.y, 17*SCALE_FACTOR, 21*SCALE_FACTOR);
         
-        attackRightHitBoxCornersOffset = new Point(27*2,15*2);
-        attackRightHitbox = new Rectangle(position.x + attackRightHitBoxCornersOffset.x, position.y + attackRightHitBoxCornersOffset.y, 17*2, 21*2);
-    
+        attackRightHitBoxCornersOffset = new Point(27*SCALE_FACTOR,15*SCALE_FACTOR);
+        attackRightHitbox = new Rectangle(position.x + attackRightHitBoxCornersOffset.x, position.y + attackRightHitBoxCornersOffset.y, 17*SCALE_FACTOR, 21*SCALE_FACTOR);
     }
 
     public void initSolidBox() {
-        solidBoxCornersOffset = new Point(16*2, 25*2);
-        solidBox = new Rectangle(position.x + solidBoxCornersOffset.x, position.y + solidBoxCornersOffset.y, 15*2, 6*2);
+        solidBoxCornersOffset = new Point(16*SCALE_FACTOR, 25*SCALE_FACTOR);
+        solidBox = new Rectangle(position.x + solidBoxCornersOffset.x, position.y + solidBoxCornersOffset.y, 15*SCALE_FACTOR, 6*SCALE_FACTOR);
     }
 
     protected void initSprites() {
@@ -138,20 +134,21 @@ public class Player extends Character {
     			spriteCounter = 0;
     		}
     		
-        	g.drawImage(image, position.x, position.y, image.getHeight()*2, image.getWidth()*2, null);        	
+        	g.drawImage(image, position.x, position.y, image.getHeight()*SCALE_FACTOR, image.getWidth()*SCALE_FACTOR, null);        	
         	
         } else {
-        	
-    		if (spriteCounter > 5) {
-    			if (spriteNum < NUMBER_OF_FRAME_IN_WALK_ANIM - 1) {
+
+            if (spriteCounter > 5) {
+    			if (spriteNum < NUMBER_OF_FRAME_IN_ATTACK_ANIM - 1) {
     				spriteNum++;
     			} else {
+    				isAttacking = false;
     				spriteNum = 0;
     			}
     			spriteCounter = 0;
     		}
 
-        	g.drawImage(image, position.x, position.y, image.getHeight()*2, image.getWidth()*2, null);        	
+        	g.drawImage(image, position.x, position.y, image.getHeight()*SCALE_FACTOR, image.getWidth()*SCALE_FACTOR, null);        	
         }
 
         super.draw(g);

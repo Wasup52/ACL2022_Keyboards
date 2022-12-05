@@ -47,10 +47,14 @@ public class RunGame implements Game {
 	Shield_potion shield_potion = new Shield_potion(tileManager.mapTiles, 15, player, false);
 	Speed_potion speed_potion = new Speed_potion(tileManager.mapTiles, 15, player, false);
 
+	Sound ambientSound = new Sound("res/sound/AMBForest.wav");
+	
 	/**
 	 * constructor with source file for help
 	 */
 	public RunGame(String source) {
+		ambientSound.loop();
+		
 		BufferedReader helpReader;
 		try {
 			helpReader = new BufferedReader(new FileReader(source));

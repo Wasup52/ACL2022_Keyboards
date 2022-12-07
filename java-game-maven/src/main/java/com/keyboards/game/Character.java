@@ -6,6 +6,7 @@ import java.awt.Point;
 import java.awt.Color;
 
 import com.keyboards.global.Global;
+import com.keyboards.sound.Sound;
 import com.keyboards.tile.Tile;
 
 public abstract class Character extends Entity{
@@ -33,6 +34,7 @@ public abstract class Character extends Entity{
 	public Point attackLeftHitBoxCornersOffset = new Point();
 	public Rectangle attackRightHitbox = new Rectangle();
 	public Point attackRightHitBoxCornersOffset = new Point();
+	Sound attackSound;
 
 	public Character(int col, int row, Tile[][] mapTiles) {
 		this.mapTiles = mapTiles;
@@ -327,6 +329,10 @@ public abstract class Character extends Entity{
 		return health <= 0;
 	}
 
+	public void playAttackSound() {
+		attackSound.play();
+	}
+	
 	public void draw(Graphics2D g) {
 		attackCooldown--;
 

@@ -26,10 +26,14 @@ public class Sound {
 	
 	public void play() {
 		clip.start();
+		if (!clip.isActive()) {
+			clip.setFramePosition(0);
+		}
 	}
 	
 	public void stop() {
 		clip.stop();
+		clip.setFramePosition(0);
 	}
 	
 	public void loop() {

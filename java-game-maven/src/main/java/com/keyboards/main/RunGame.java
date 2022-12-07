@@ -22,6 +22,7 @@ import com.keyboards.game.Speed_potion;
 import com.keyboards.game.Treasure;
 import com.keyboards.game.Zombie;
 import com.keyboards.global.Global;
+import com.keyboards.sound.Sound;
 import com.keyboards.tile.TileManager;
 
 public class RunGame implements Game {
@@ -107,6 +108,8 @@ public class RunGame implements Game {
 			}
 
 			if (commands.get("ATTACK")) {
+				player.playAttackSound();
+				
 				player.isAttacking = true;
 				// System.out.println("Player is attacking");
 			}

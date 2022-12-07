@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 
 import com.keyboards.graphics.Sprite;
 import com.keyboards.graphics.SpriteSheet;
+import com.keyboards.sound.Sound;
 import com.keyboards.tile.Tile;
 
 
@@ -80,6 +81,8 @@ public class Player extends Character {
         walkRight = walkRightSheet.getSpriteArray();
         attackRight = attackRightSheet.getSpriteArray();
         attackLeft = attackLeftSheet.getSpriteArray();
+        
+        attackSound = new Sound("res/sound/Attackwoosh.wav");
     }
 
     public void pickUp(Item item) {

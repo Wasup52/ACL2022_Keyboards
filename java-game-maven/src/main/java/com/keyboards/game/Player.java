@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
+import com.keyboards.graphics.Animation;
 import com.keyboards.graphics.Sprite;
 import com.keyboards.graphics.SpriteSheet;
 import com.keyboards.sound.Sound;
@@ -19,16 +20,12 @@ public class Player extends Character {
 
     public boolean isAttacking = false;
 
-    private Sprite[] idleLeft;
-    private Sprite[] idleRight;
-    private Sprite[] walkLeft;
-    private Sprite[] walkRight;
-    private Sprite[] attackLeft;
-    private Sprite[] attackRight;
-    
-    public int spriteNum = 0;
-    public int spriteAttack = 0;
-    public int spriteCounter = 0;
+    private Animation idleLeft;
+    private Animation idleRight;
+    private Animation walkLeft;
+    private Animation walkRight;
+    private Animation attackLeft;
+    private Animation attackRight;
     
     private final int SCALE_FACTOR = 2;
 
@@ -75,12 +72,12 @@ public class Player extends Character {
         SpriteSheet attackRightSheet = new SpriteSheet("res/player/player-attack-right-strip.png", 48, 48);
         SpriteSheet attackLeftSheet = new SpriteSheet("res/player/player-attack-left-strip.png", 48, 48);
         
-        idleLeft = idleLeftSheet.getSpriteArray();
-        idleRight = idleRightSheet.getSpriteArray();
-        walkLeft = walkLeftSheet.getSpriteArray();
-        walkRight = walkRightSheet.getSpriteArray();
-        attackRight = attackRightSheet.getSpriteArray();
-        attackLeft = attackLeftSheet.getSpriteArray();
+        idleLeft = new Animation(idleLeftSheet.getSpriteArray(), 5);
+        idleRight = new Animation(idleRightSheet.getSpriteArray(), 5);
+        walkLeft = new Animation(walkLeftSheet.getSpriteArray(), 5);
+        walkRight = new Animation(walkRightSheet.getSpriteArray(), 5);
+        attackLeft = new Animation(attackLeftSheet.getSpriteArray(), 5);
+        attackRight = new Animation(attackRightSheet.getSpriteArray(), 5);
         
         attackSound = new Sound("res/sound/Attackwoosh.wav");
     }
@@ -106,50 +103,40 @@ public class Player extends Character {
 
     public void draw(Graphics2D g) {
 
+        idleLeft.update();
+        idleRight.update();
+        walkLeft.update();
+        walkRight.update();
+        
         BufferedImage image = null;
         
         if (direction == IDLE + RIGHT) {
-            image = idleRight[spriteNum].image;
+            image = idleRight.getSprite().image;
         } else if (direction == IDLE + LEFT) {
-            image = idleLeft[spriteNum].image;
+            image = idleLeft.getSprite().image;
         } else if (direction == RIGHT) {
-            image = walkRight[spriteNum].image;
+            image = walkRight.getSprite().image;
         } else if (direction == LEFT) {
-            image = walkLeft[spriteNum].image;
+            image = walkLeft.getSprite().image;
         }
 
         if ((direction == LEFT || lastDirection == LEFT) && isAttacking) {
-        	image = attackLeft[spriteAttack].image;
+        	image = attackLeft.getSprite().image;
         } else if ((direction == RIGHT || lastDirection == RIGHT) && isAttacking) {
-        	image = attackRight[spriteAttack].image;
+        	image = attackRight.getSprite().image;
         }
 
-        spriteCounter++;
         if (isAttacking) {
-        	
-    		if (spriteCounter > 5) {
-    			if (spriteAttack < NUMBER_OF_FRAME_IN_ATTACK_ANIM - 1) {
-    				spriteAttack++;
-    			} else {
-    				isAttacking = false;
-    				spriteAttack = 0;
-    			}
-    			spriteCounter = 0;
+    		if (attackLeft.reachedEndFrame() || attackRight.reachedEndFrame()) {
+    			isAttacking = false;
     		}
+
+            attackLeft.update();
+            attackRight.update();
     		
         	g.drawImage(image, position.x, position.y, image.getHeight()*SCALE_FACTOR, image.getWidth()*SCALE_FACTOR, null);        	
         	
         } else {
-
-            if (spriteCounter > 5) {
-    			if (spriteNum < NUMBER_OF_FRAME_IN_ATTACK_ANIM - 1) {
-    				spriteNum++;
-    			} else {
-    				isAttacking = false;
-    				spriteNum = 0;
-    			}
-    			spriteCounter = 0;
-    		}
 
         	g.drawImage(image, position.x, position.y, image.getHeight()*SCALE_FACTOR, image.getWidth()*SCALE_FACTOR, null);        	
         }

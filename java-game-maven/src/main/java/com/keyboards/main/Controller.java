@@ -26,7 +26,6 @@ public class Controller implements GameController{
 		commands.put("ESCAPE", false);
 		commands.put("TAB", false);
 		commands.put("INTERACT", false);
-
 	}
 
 	/**
@@ -36,7 +35,7 @@ public class Controller implements GameController{
 	 */
 	public static boolean isIdle(HashMap<String, Boolean> commands) {
 		for (String key : commands.keySet()) {
-			if (commands.get(key) == true) {
+			if (key != "SHIFT" && commands.get(key)) {
 				return false;
 			}
 		}

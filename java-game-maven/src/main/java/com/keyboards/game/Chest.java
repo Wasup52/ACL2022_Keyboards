@@ -3,7 +3,9 @@ package com.keyboards.game;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 
+import com.keyboards.graphics.Animation;
 import com.keyboards.graphics.Sprite;
 import com.keyboards.graphics.SpriteSheet;
 import com.keyboards.tile.Tile;
@@ -11,16 +13,16 @@ import com.keyboards.tile.Tile;
 public class Chest extends Object{
 
     private Inventory inventory = new Inventory(this, 5, 5);
-
-    private final int NUMBER_OF_FRAME_IN_OPEN_ANIM = 4;
+    
+    private int spritesSize;
     private final int scale_factor = 2;
 
-    private Sprite[] spriteArray;
-    
-    public int spriteNum = 0;
-    public int spriteCounter = 0;
+    private Animation openingAnim;
+    private Animation closingAnim;
+    private BufferedImage openedImage;
+    private BufferedImage closedImage;
 
-    private boolean oppening = false;
+    private boolean opening = false;
     private boolean closing = false;
 
     public Chest(int col, int row, Tile[][] mapTiles) {
@@ -37,23 +39,30 @@ public class Chest extends Object{
 
     public void initHitBox() {
         hitBoxCornersOffset = new Point(1,1 );
-        hitbox = new Rectangle(position.x-(spriteArray[0].getHeight()/2)*scale_factor, position.y-2*(spriteArray[0].getWidth()/2),spriteArray[0].getHeight()*scale_factor - hitBoxCornersOffset.x*scale_factor,spriteArray[0].getWidth()*scale_factor- hitBoxCornersOffset.y*scale_factor);
+        hitbox = new Rectangle(position.x-(spritesSize/2)*scale_factor, position.y-2*(spritesSize/2),spritesSize*scale_factor - hitBoxCornersOffset.x*scale_factor,spritesSize*scale_factor- hitBoxCornersOffset.y*scale_factor);
     }
 
     public void initSolidBox() {
         solidBoxCornersOffset = new Point(1,1);
-        solidBox = new Rectangle(position.x-(spriteArray[0].getHeight()/2)*scale_factor, position.y-(spriteArray[0].getWidth()/2)*scale_factor,spriteArray[0].getHeight()*scale_factor - hitBoxCornersOffset.x*scale_factor,spriteArray[0].getWidth()*scale_factor- hitBoxCornersOffset.y*scale_factor);
+        solidBox = new Rectangle(position.x-(spritesSize/2)*scale_factor, position.y-(spritesSize/2)*scale_factor,spritesSize*scale_factor - hitBoxCornersOffset.x*scale_factor,spritesSize*scale_factor- hitBoxCornersOffset.y*scale_factor);
     }
 
     protected void initSprites() {
-        SpriteSheet spriteSheet = new SpriteSheet("res/Objects/Chest.png", 16, 16);
+        spritesSize = 16;
+        SpriteSheet spriteSheet = new SpriteSheet("res/Objects/Chest.png", spritesSize, spritesSize);
+        Sprite[] spriteArray = spriteSheet.getSpriteArray();
 
-        spriteArray = spriteSheet.getSpriteArray();
+        openedImage = spriteArray[spriteArray.length-1].image;
+        closedImage = spriteArray[0].image;
+
+
+        openingAnim = new Animation(spriteArray, 5, false);
+        closingAnim = new Animation(spriteArray, 5, true);
     }
 
     public boolean isOpen() { return inventory.isOpen(); }
-    public void open() { oppening = true; spriteNum = 0; inventory.open(); }
-    public void close() { closing = true; spriteNum = NUMBER_OF_FRAME_IN_OPEN_ANIM - 1; inventory.close(); }
+    public void open() { opening = true; /* spriteNum = 0 */; inventory.open(); }
+    public void close() { closing = true; /* spriteNum = NUMBER_OF_FRAME_IN_OPEN_ANIM - 1 */; inventory.close(); }
     public void put(Item item) { inventory.addItem(item); }
 
     public void transfertClickedItem(int mouseX, int mouseY, Player player) {
@@ -63,48 +72,49 @@ public class Chest extends Object{
     public void drawInventory(Graphics2D g) { inventory.draw(g); }
 
     public void draw(Graphics2D g) {
-        if (oppening || closing) {
-            spriteCounter++;
+        BufferedImage image = null;
 
-            if (spriteCounter > 5) {
-                if ((spriteNum < NUMBER_OF_FRAME_IN_OPEN_ANIM - 1 && oppening) || (spriteNum > 0 && closing)) {
-                    spriteNum += oppening ? 1 : -1;
+        if (opening || closing) {
+            if (opening) {
+                openingAnim.update();
+                if (openingAnim.reachedEndFrame()) {
+                    opening = false;
+                    image = openedImage;
                 } else {
-                    if (oppening) {
-                        spriteNum = NUMBER_OF_FRAME_IN_OPEN_ANIM - 1;
-                    }
-                    if (closing) {
-                        spriteNum = 0;
-                    }
-                    oppening = false;
-                    closing = false;
+                    image = openingAnim.getSprite().image;
                 }
-                spriteCounter = 0;
+            } else {
+                closingAnim.update();
+                if (closingAnim.reachedEndFrame()) {
+                    closing = false;
+                    image = closedImage;
+                } else {
+                    image = closingAnim.getSprite().image;
+                }
             }
 
-            g.drawImage(spriteArray[spriteNum].image,
-                position.x-spriteArray[0].getHeight()/2*scale_factor,
-                position.y-spriteArray[0].getHeight()/2*scale_factor,
-                spriteArray[0].getHeight()*scale_factor,
-                spriteArray[0].getHeight()*scale_factor,
+            g.drawImage(image,
+                position.x-spritesSize/2*scale_factor,
+                position.y-spritesSize/2*scale_factor,
+                spritesSize*scale_factor,
+                spritesSize*scale_factor,
                 null
             );
         } else {
-            spriteNum = 0;
             if (inventory.isOpen()) {
-                g.drawImage(spriteArray[NUMBER_OF_FRAME_IN_OPEN_ANIM-1].image, 
-                    position.x-spriteArray[0].getHeight()/2*scale_factor, 
-                    position.y-spriteArray[0].getHeight()/2*scale_factor,
-                    spriteArray[0].getHeight()*scale_factor,
-                    spriteArray[0].getHeight()*scale_factor,
+                g.drawImage(openedImage, 
+                    position.x-spritesSize/2*scale_factor, 
+                    position.y-spritesSize/2*scale_factor,
+                    spritesSize*scale_factor,
+                    spritesSize*scale_factor,
                     null
                 );
             } else {
-                g.drawImage(spriteArray[0].image,
-                    position.x-spriteArray[0].getHeight()/2*scale_factor,
-                    position.y-spriteArray[0].getHeight()/2*scale_factor,
-                    spriteArray[0].getHeight()*scale_factor,
-                    spriteArray[0].getHeight()*scale_factor,
+                g.drawImage(closedImage,
+                    position.x-spritesSize/2*scale_factor,
+                    position.y-spritesSize/2*scale_factor,
+                    spritesSize*scale_factor,
+                    spritesSize*scale_factor,
                     null
                 );
             }

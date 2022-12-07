@@ -166,7 +166,7 @@ public abstract class Mob extends Character{
                 moveUp();
             }
         } else {
-            direction = lastDirection + IDLE;
+            idle();
         }
     }
 

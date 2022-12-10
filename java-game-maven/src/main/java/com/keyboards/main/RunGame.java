@@ -180,6 +180,14 @@ public class RunGame implements Game {
 		}
 		if (zombie.canAttack(player)) {
 			zombie.attack(player);
+			zombie.isAttacking=true;
+		}
+		if (!ghost.isDead()) {
+			ghost.moveTowards(player);
+		}
+		if (ghost.canAttack(player)) {
+			ghost.attack(player);
+			ghost.isAttacking=true;
 		}
 		// ghost.moveTowards(player);
 		// if (ghost.collidesWith(player)) {

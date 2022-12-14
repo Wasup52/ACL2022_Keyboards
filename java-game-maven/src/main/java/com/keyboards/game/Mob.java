@@ -27,6 +27,8 @@ public abstract class Mob extends Character{
     
     private final Stroke pathStroke = new BasicStroke(5, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
 
+    int agroRange;
+
     public Mob(int col, int row, Tile[][] mapTiles) {
 		super(col, row, mapTiles);
 
@@ -42,7 +44,7 @@ public abstract class Mob extends Character{
     private void initPathFinding() {
         path = new ArrayList<>();
         
-        grid = new Node[Global.ROW_NUM][Global.COL_NUM];
+        grid = new Node[Global.WORLD_ROW_NUM][Global.WORLD_COL_NUM];
         
         graph = new Graph<>((start, target, current) -> {
             // --- implement heuristic here ---
@@ -68,8 +70,8 @@ public abstract class Mob extends Character{
         // String output = "";
         
         // create a grid of nodes, where each node represents a tile in the map
-        for (int y = 0; y < Global.ROW_NUM; y++) {
-            for (int x = 0; x < Global.COL_NUM; x++) {
+        for (int y = 0; y < Global.WORLD_ROW_NUM; y++) {
+            for (int x = 0; x < Global.WORLD_COL_NUM; x++) {
                 int nx = x * Global.TILE_SIZE;
                 int ny = y * Global.TILE_SIZE;
                 if (mapTiles[y][x].isSolid()) {
@@ -92,15 +94,15 @@ public abstract class Mob extends Character{
         
         double diagonalG = Math.sqrt(Global.TILE_SIZE * Global.TILE_SIZE + Global.TILE_SIZE * Global.TILE_SIZE); // diagonal distance between two tiles
         
-        for (int y = 0; y < Global.ROW_NUM - 1; y++) {
-            for (int x = 0; x < Global.COL_NUM; x++) {
+        for (int y = 0; y < Global.WORLD_ROW_NUM - 1; y++) {
+            for (int x = 0; x < Global.WORLD_COL_NUM; x++) {
                 // vertical '|'
                 Node top = grid[y][x];
                 Node bottom = grid[y + 1][x];
                 graph.link(top, bottom, Global.TILE_SIZE);
                 
                 // diagonals 'X'
-                if (x < Global.COL_NUM - 1) {
+                if (x < Global.WORLD_COL_NUM - 1) {
                     // diagonal '\'
                     top = grid[y][x];
                     bottom = grid[y + 1][x + 1];
@@ -114,8 +116,8 @@ public abstract class Mob extends Character{
             }
         }
 
-        for (int x = 0; x < Global.COL_NUM - 1; x++) {
-            for (int y = 0; y < Global.ROW_NUM; y++) {
+        for (int x = 0; x < Global.WORLD_COL_NUM - 1; x++) {
+            for (int y = 0; y < Global.WORLD_ROW_NUM; y++) {
                 // horizontal '-'
                 Node left = grid[y][x];
                 Node right = grid[y][x + 1];
@@ -126,7 +128,7 @@ public abstract class Mob extends Character{
 
     private List<Node<Point>> getPath(Entity target) {
         
-        if (getRow() >= 0 && getRow() < Global.ROW_NUM && getCol() >= 0 && getCol() < Global.COL_NUM) {
+        if (getRow() >= 0 && getRow() < Global.WORLD_ROW_NUM && getCol() >= 0 && getCol() < Global.WORLD_COL_NUM) {
             startNode = grid[getRow()][getCol()];
             targetNode = grid[target.getRow()][target.getCol()];
 
@@ -223,6 +225,16 @@ public abstract class Mob extends Character{
             g.drawLine(x1, y1, x2, y2);
         }
         g.setStroke(originalStroke);
+    }
+
+    public void update(Player player) {
+        if (!isDead()) {
+            moveTowards(player);
+
+            if (canAttack(player)) {
+                attack(player);
+            }
+        }
     }
 
     public void draw(Graphics2D g) {

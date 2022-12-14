@@ -69,5 +69,13 @@ public class Animation {
     public int getSpriteNum() { return spriteNum; }
     public boolean reachedEndFrame() { return hasReachedEndFrame; }
     public Sprite getSprite() { return sprites[spriteNum]; }
+
+    public Sprite getLastFrameSprite() {
+        if (isReversed) {
+            return sprites[0];
+        } else {
+            return sprites[sprites.length-1];
+        }
+    }
     
 }

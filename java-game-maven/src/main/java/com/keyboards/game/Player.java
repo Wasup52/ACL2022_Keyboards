@@ -15,20 +15,6 @@ import com.keyboards.tile.Tile;
 public class Player extends Character {
     private Inventory inventory = new Inventory(this, 2, 6);
 
-    public final int NUMBER_OF_FRAME_IN_WALK_ANIM = 6;
-    public final int NUMBER_OF_FRAME_IN_ATTACK_ANIM = 4;
-
-    public boolean isAttacking = false;
-
-    private Animation idleLeft;
-    private Animation idleRight;
-    private Animation walkLeft;
-    private Animation walkRight;
-    private Animation attackLeft;
-    private Animation attackRight;
-    
-    private final int SCALE_FACTOR = 2;
-
     public final int maxHealth = 12;
 
     public Player(int col, int row, Tile[][] mapTiles) {
@@ -46,6 +32,8 @@ public class Player extends Character {
         speed = 1;
         sprintSpeed = 2;
         attackCooldownMax = 25;
+
+        SCALE_FACTOR = 2;
     }
 
     public void initHitBox() {
@@ -71,6 +59,8 @@ public class Player extends Character {
         SpriteSheet walkRightSheet = new SpriteSheet("res/player/player-walk-right-strip.png", 48, 48);
         SpriteSheet attackRightSheet = new SpriteSheet("res/player/player-attack-right-strip.png", 48, 48);
         SpriteSheet attackLeftSheet = new SpriteSheet("res/player/player-attack-left-strip.png", 48, 48);
+        SpriteSheet deathRightSheet = new SpriteSheet("res/player/player-death-right-strip.png", 48, 48);
+        SpriteSheet deathLeftSheet = new SpriteSheet("res/player/player-death-left-strip.png", 48, 48);
         
         idleLeft = new Animation(idleLeftSheet.getSpriteArray(), 5);
         idleRight = new Animation(idleRightSheet.getSpriteArray(), 5);
@@ -78,8 +68,13 @@ public class Player extends Character {
         walkRight = new Animation(walkRightSheet.getSpriteArray(), 5);
         attackLeft = new Animation(attackLeftSheet.getSpriteArray(), 5);
         attackRight = new Animation(attackRightSheet.getSpriteArray(), 5);
-        
+        deathLeft = new Animation(deathLeftSheet.getSpriteArray(), 5);
+        deathRight = new Animation(deathRightSheet.getSpriteArray(), 5);
+    }
+
+    protected void initSounds() {
         attackSound = new Sound("res/sound/Attackwoosh.wav");
+        deathSound = new Sound("res/sound/ghostdead.wav");
     }
 
     public void pickUp(Item item) {
@@ -101,6 +96,7 @@ public class Player extends Character {
 
     public void drawInventory(Graphics2D g) { inventory.draw(g); }
 
+    /*
     public void draw(Graphics2D g) {
 
         idleLeft.update();
@@ -143,4 +139,5 @@ public class Player extends Character {
 
         super.draw(g);
     }
+    */
 }

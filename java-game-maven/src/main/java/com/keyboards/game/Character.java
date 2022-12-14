@@ -4,8 +4,11 @@ import java.awt.Rectangle;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.awt.AlphaComposite;
 
 import com.keyboards.global.Global;
+import com.keyboards.graphics.Animation;
 import com.keyboards.sound.Sound;
 import com.keyboards.tile.Tile;
 
@@ -34,7 +37,24 @@ public abstract class Character extends Entity{
 	public Point attackLeftHitBoxCornersOffset = new Point();
 	public Rectangle attackRightHitbox = new Rectangle();
 	public Point attackRightHitBoxCornersOffset = new Point();
+
+	Animation idleLeft;
+    Animation idleRight;
+    Animation walkLeft;
+    Animation walkRight;
+    Animation attackLeft;
+    Animation attackRight;
+    Animation deathLeft;
+	Animation deathRight;
+
+    int SCALE_FACTOR = 1;
+	
 	Sound attackSound;
+	Sound deathSound;
+
+	private final int FADE_TIME = 60;
+    private int fadeTimer = FADE_TIME;
+    private float alphaValue = 1;
 
 	public Character(int col, int row, Tile[][] mapTiles) {
 		this.mapTiles = mapTiles;
@@ -44,8 +64,8 @@ public abstract class Character extends Entity{
 		}
 		
 		if (mapTiles[row][col].isSolid()) {
-			placeRandomly(mapTiles);
 			System.out.println("The chosen tile is solid, placing the character randomly");
+			placeRandomly(mapTiles);
 		}
 		
 		init();
@@ -100,12 +120,14 @@ public abstract class Character extends Entity{
 	protected abstract void initHitBox();
 	protected abstract void initSolidBox();
 	protected abstract void initSprites();
+	protected abstract void initSounds();
 
 	private void init() {
 		initStats();
 		initHitBox();
 		initSolidBox();
 		initSprites();
+		initSounds();
 	}
 
 	/**
@@ -298,6 +320,7 @@ public abstract class Character extends Entity{
 	 */
 	public void attack(Character character) {
 		attackCooldown = attackCooldownMax;
+		isAttacking = true;
 
 		if (character.health > 0) {
 			character.health -= attackDamage;
@@ -323,7 +346,9 @@ public abstract class Character extends Entity{
 		return false;
 	}
 	
-	protected abstract void die();
+	protected void die() {
+		deathSound.play();
+	}
 
 	public boolean isDead() {
 		return health <= 0;
@@ -332,9 +357,77 @@ public abstract class Character extends Entity{
 	public void playAttackSound() {
 		attackSound.play();
 	}
+
+	public void playDeathSound() {
+		deathSound.play();
+	}
+
+	private void fade() {
+        fadeTimer--;
+        alphaValue = (float) fadeTimer / (float) FADE_TIME;
+    }
+
+    public boolean isFaded() {
+        return fadeTimer <= 0;
+    }
 	
 	public void draw(Graphics2D g) {
 		attackCooldown--;
+
+		BufferedImage image = null;
+
+		if (isDead()) {
+			if (!deathLeft.reachedEndFrame() && !deathRight.reachedEndFrame()) {
+				if (direction == LEFT || lastDirection == LEFT) {
+					image = deathLeft.getSprite().image;
+					deathLeft.update();
+				} else {
+					image = deathRight.getSprite().image;
+					deathRight.update();
+				}
+			} else {
+				if (!isFaded()) { fade(); }
+
+				g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alphaValue));
+
+				if (direction == LEFT || lastDirection == LEFT) {
+					image = deathLeft.getLastFrameSprite().image;
+				} else {
+					image = deathRight.getLastFrameSprite().image;
+				}
+			}
+		} else {
+			if (direction == IDLE + RIGHT) {
+				image = idleRight.getSprite().image;
+				idleRight.update();
+			} else if (direction == IDLE + LEFT) {
+				image = idleLeft.getSprite().image;
+				idleLeft.update();
+			} else if (direction == RIGHT) {
+				image = walkRight.getSprite().image;
+				walkRight.update();
+			} else if (direction == LEFT) {
+				image = walkLeft.getSprite().image;
+				walkLeft.update();
+			}
+	
+			if ((direction == LEFT || lastDirection == LEFT) && isAttacking) {
+				image = attackLeft.getSprite().image;
+				attackLeft.update();
+			} else if ((direction == RIGHT || lastDirection == RIGHT) && isAttacking) {
+				image = attackRight.getSprite().image;
+				attackRight.update();
+			}
+	
+			if (isAttacking && (attackLeft.reachedEndFrame() || attackRight.reachedEndFrame())) {
+				isAttacking = false;
+			}
+		}
+		
+		g.drawImage(image, position.x, position.y, image.getHeight()*SCALE_FACTOR, image.getWidth()*SCALE_FACTOR, null);
+		if (alphaValue != 1) {
+			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
+		}
 
         if (Global.DEBUG) {
             // fill suronding squares with semi transparent yellow

@@ -94,7 +94,7 @@ public class RunGame implements Game {
 		keyCooldown--;
 		
 		// if an inventory is open the player can't do anything else
-		if (!inventoryOpen) {
+		if (!inventoryOpen && !player.isDead()) {
 			if (commands.get("UP")) { player.moveUp(); }
 			if (commands.get("DOWN")) { player.moveDown(); }
 			if (commands.get("LEFT")) { player.moveLeft(); }
@@ -115,6 +115,7 @@ public class RunGame implements Game {
 			}
 
 			if (player.isAttacking) {
+				// check if a mob is in the attack range
 				for (Mob mob : mobs) {
 					if (player.canAttack(mob)) {
 						System.out.println(mob + " attacked");
@@ -174,25 +175,16 @@ public class RunGame implements Game {
 				}
 			}
 		}
-		
-		if (!zombie.isDead()) {
-			zombie.moveTowards(player);
+
+		for (int i=0; i < mobs.size(); i++) {
+			Mob mob = mobs.get(i);
+			mob.update(player);
+			if (mob.isFaded()) {
+				entities.remove(mob);
+				mobs.remove(mob);
+				i--;
+			}
 		}
-		if (zombie.canAttack(player)) {
-			zombie.attack(player);
-			zombie.isAttacking=true;
-		}
-		if (!ghost.isDead()) {
-			ghost.moveTowards(player);
-		}
-		if (ghost.canAttack(player)) {
-			ghost.attack(player);
-			ghost.isAttacking=true;
-		}
-		// ghost.moveTowards(player);
-		// if (ghost.collidesWith(player)) {
-		// 	ghost.attack(player);
-		// }
 	}
 
 	/**

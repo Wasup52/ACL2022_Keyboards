@@ -7,10 +7,11 @@ import java.awt.Rectangle;
 
 import com.keyboards.global.Global;
 import com.keyboards.graphics.SpriteSheet;
+import com.keyboards.sound.Sound;
 import com.keyboards.tile.Tile;
 
 public class Attack_potion extends Item {
-
+	Sound drinkingSound;
 	public Attack_potion(int col, int row, Tile[][] mapTiles, boolean isInInventory) {
 		super(col, row, mapTiles, isInInventory);
 		this.skillIncrease = 1;
@@ -21,9 +22,13 @@ public class Attack_potion extends Item {
 		this.skillIncrease = 1;
 	}
 
+	public void playDrinkingSound() {
+		drinkingSound.play();
+	}
 	public void use(Character character) {
 		character.attackDamage += this.skillIncrease;
 		System.out.println("used " + this.getClass().getSimpleName());
+		playDrinkingSound();
 	}
 
 	public void initHitBox() {
@@ -41,12 +46,16 @@ public class Attack_potion extends Item {
 
 		sprite = Sprite.getSpriteArray();
 		this.image = sprite[0].image;
+		
+		drinkingSound = new Sound("res/sound/drinkingSound.wav");
+		
 	}
 
 
 	public void draw(Graphics2D g, int x, int y) {
 		g.drawImage(this.image, x, y,this.image.getHeight(),image.getWidth(), null);
     }
+	
 
     public void draw(Graphics2D g) {
         g.drawImage(this.image, position.x-this.image.getHeight()/2, position.y-this.image.getWidth()/2,this.image.getHeight(),image.getWidth(), null);

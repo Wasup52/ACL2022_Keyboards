@@ -75,6 +75,8 @@ public class Player extends Character {
     protected void initSounds() {
         attackSound = new Sound("res/sound/Attackwoosh.wav");
         deathSound = new Sound("res/sound/ghostdead.wav");
+        footStepGrassSound = new Sound("res/sound/grassFootStepSound.wav");
+
     }
 
     public void pickUp(Item item) {

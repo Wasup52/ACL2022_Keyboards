@@ -51,6 +51,7 @@ public abstract class Character extends Entity{
 	
 	Sound attackSound;
 	Sound deathSound;
+	Sound footStepGrassSound;
 
 	private final int FADE_TIME = 60;
     private int fadeTimer = FADE_TIME;
@@ -361,6 +362,10 @@ public abstract class Character extends Entity{
 	public void playDeathSound() {
 		deathSound.play();
 	}
+	
+	public void playFootStepGrassSound() {
+	footStepGrassSound.play();
+}
 
 	private void fade() {
         fadeTimer--;

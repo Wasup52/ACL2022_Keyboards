@@ -7,11 +7,12 @@ import java.awt.Rectangle;
 
 import com.keyboards.global.Global;
 import com.keyboards.graphics.SpriteSheet;
+import com.keyboards.sound.Sound;
 import com.keyboards.tile.Tile;
 
 public class Treasure extends Object {
 	
-	
+	Sound treasureSound;
 	int coef_agrandissement_image=2;
     public Treasure(int col, int row, Tile[][] mapTiles) {
     	super(col, row, mapTiles);
@@ -30,14 +31,19 @@ public class Treasure extends Object {
         solidBoxCornersOffset = new Point(0,0);
         solidBox = new Rectangle(position.x-(this.image.getHeight()/2)*2, position.y-(this.image.getWidth()/2)*2,this.image.getHeight()*2 - hitBoxCornersOffset.x*2,this.image.getWidth()*2- hitBoxCornersOffset.y*2);
     }
+
     
     protected void initSprites() {
         SpriteSheet Sprite = new SpriteSheet("res/Objects/Treasure.png",16,16);
        
         super.sprite = Sprite.getSpriteArray();
         this.image = sprite[0].image;
+        
+        treasureSound = new Sound("res/sound/treasureSound.wav");
     }
-    
+	public void playTreasureSound() {
+		treasureSound.play();
+	}
     
     public void draw(Graphics2D g) {
         g.drawImage(this.image, position.x-(this.image.getHeight()/2)*2, position.y-(this.image.getWidth()/2)*2,this.image.getHeight()*2,image.getWidth()*2, null);

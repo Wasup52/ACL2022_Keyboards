@@ -8,9 +8,12 @@ import java.awt.image.BufferedImage;
 import com.keyboards.graphics.Animation;
 import com.keyboards.graphics.Sprite;
 import com.keyboards.graphics.SpriteSheet;
+import com.keyboards.sound.Sound;
 import com.keyboards.tile.Tile;
 
 public class Chest extends Object{
+	Sound openChestSound;
+	Sound closeChestSound;
 
     private Inventory inventory = new Inventory(this, 5, 5);
     
@@ -58,6 +61,9 @@ public class Chest extends Object{
 
         openingAnim = new Animation(spriteArray, 5, false);
         closingAnim = new Animation(spriteArray, 5, true);
+        
+ 	 openChestSound = new Sound("res/sound/openingChest.wav");
+ 	 closeChestSound = new Sound("res/sound/closingChest.wav");
     }
 
     public boolean isOpen() { return inventory.isOpen(); }
@@ -70,6 +76,14 @@ public class Chest extends Object{
     }
 
     public void drawInventory(Graphics2D g) { inventory.draw(g); }
+    
+	public void playOpenChestSound() {
+	openChestSound.play();
+	}
+	
+	public void playCloseChestSound() {
+		closeChestSound.play();
+	}
 
     public void draw(Graphics2D g) {
         BufferedImage image = null;

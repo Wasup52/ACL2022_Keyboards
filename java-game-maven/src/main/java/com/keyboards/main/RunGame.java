@@ -95,10 +95,22 @@ public class RunGame implements Game {
 		
 		// if an inventory is open the player can't do anything else
 		if (!inventoryOpen && !player.isDead()) {
-			if (commands.get("UP")) { player.moveUp(); }
-			if (commands.get("DOWN")) { player.moveDown(); }
-			if (commands.get("LEFT")) { player.moveLeft(); }
-			if (commands.get("RIGHT")) { player.moveRight(); }
+			if (commands.get("UP")) {
+				player.moveUp();
+				player.playFootStepGrassSound();
+			}
+			if (commands.get("DOWN")) { 
+				player.moveDown(); 
+				player.playFootStepGrassSound();
+			}
+			if (commands.get("LEFT")) { 
+				player.moveLeft();
+				player.playFootStepGrassSound();
+			}
+			if (commands.get("RIGHT")) { 
+				player.moveRight();
+				player.playFootStepGrassSound();
+			}
 			if (Controller.isIdle(commands)) { player.idle(); }
 
 			if (commands.get("SHIFT")) {
@@ -133,9 +145,11 @@ public class RunGame implements Game {
 							}
 							if (entity instanceof Chest) {
 								((Chest) entity).open();
+								chest.playOpenChestSound();
 								inventoryOpen = true;
 							}
 							if (entity instanceof Treasure) {
+								treasure.playTreasureSound();
 								isFinished = true;
 							}
 						}
@@ -154,6 +168,7 @@ public class RunGame implements Game {
 						player.closeInventory();
 					}
 					if (chest.isOpen()) {
+						chest.playCloseChestSound();
 						chest.close();
 					}
 				} else {

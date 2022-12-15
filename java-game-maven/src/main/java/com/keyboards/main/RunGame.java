@@ -233,6 +233,9 @@ public class RunGame implements Game {
 		if (isFinished) {
 			System.out.println("Game finished");
 		}
-		return isFinished;
+		if (player.isDead()) {
+			System.out.println("Game over");
+		}
+		return isFinished || player.isDead();
 	}
 }

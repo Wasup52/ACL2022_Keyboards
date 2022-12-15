@@ -30,7 +30,8 @@ public class RunGame implements Game {
 	ArrayList<Entity> entities = new ArrayList<Entity>();
 	ArrayList<Mob> mobs = new ArrayList<Mob>();
 
-	TileManager tileManager = new TileManager("res/mapsFile/test1.txt");
+	//TileManager tileManager = new TileManager("res/mapsFile/test1.txt");
+	TileManager tileManager = new TileManager("res/mapsFile/mapSnow.txt", "res/tiles/sprite_snow_3.png");
 	UI ui = new UI();
 	
 	int keyCooldown = Global.KEY_COOLDOWN;

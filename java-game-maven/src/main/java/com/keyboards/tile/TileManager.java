@@ -14,17 +14,45 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 import com.keyboards.global.Global;
+import com.keyboards.graphics.Sprite;
+import com.keyboards.graphics.SpriteSheet;
 
 public class TileManager {
 	
 	public ArrayList<BufferedImage> tilesImages;
 	public Tile[][] mapTiles;
+	SpriteSheet tileSpriteSheet;
 
 	public TileManager(String mapFilePath) {
 		tilesImages = new ArrayList<BufferedImage>();
 		mapTiles = new Tile[Global.WORLD_ROW_NUM][Global.WORLD_COL_NUM];
 		
 		loadTileArrayFromDir("res/tiles-grass");
+		System.out.println("TileManager: " + tilesImages.size() + " tiles loaded");
+
+		initMapFromFile(mapFilePath);
+
+		System.out.println("Nb of rows: " + mapTiles.length);
+		System.out.println("Nb of cols: " + mapTiles[0].length);
+
+		// print map tiles
+//		for (int i = 0; i < mapTiles.length; i++) {
+//			for (int j = 0; j < mapTiles[0].length; j++) {
+//				System.out.print(mapTiles[i][j] + " "); 
+//			}
+//			System.out.println();
+//		}
+	}
+	
+	public TileManager(String mapFilePath, String sprintSheetPath) {
+		tileSpriteSheet = new SpriteSheet(sprintSheetPath, 16, 16);
+		tilesImages = new ArrayList<BufferedImage>();
+		for(Sprite sprite : tileSpriteSheet.getSpriteArray()) {
+			tilesImages.add(sprite.image);
+		}
+		mapTiles = new Tile[Global.WORLD_ROW_NUM][Global.WORLD_COL_NUM];
+		
+		
 		System.out.println("TileManager: " + tilesImages.size() + " tiles loaded");
 
 		initMapFromFile(mapFilePath);
@@ -139,10 +167,11 @@ public class TileManager {
 				}
 	
 				for (int col = 0; col < lineSplit.length; col++) {
-					int tileIndex = Integer.parseInt(lineSplit[col]);
+					int tileIndex = Integer.parseInt(lineSplit[col])-1;
 
 					if (tileIndex >= tilesImages.size()) {
 						br.close();
+						System.out.println("Index : " + tileIndex + ", size : " + tilesImages.size());
 						throw new Exception("ERROR: invalid map file (invalid tile index on line " + row + ")");
 					}
 
@@ -151,7 +180,7 @@ public class TileManager {
 					} else {
 						BufferedImage tileImage;
 						tileImage = tilesImages.get(tileIndex);
-						if (tileIndex != 7) {
+						if (tileIndex != 5) {
 							mapTiles[row][col] = new Tile(row, col, tileImage, new Rectangle(col * Global.TILE_SIZE, row * Global.TILE_SIZE, Global.TILE_SIZE, Global.TILE_SIZE));
 						} else {
 							mapTiles[row][col] = new Tile(row, col, tileImage);

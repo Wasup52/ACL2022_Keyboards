@@ -30,8 +30,8 @@ public class SpriteSheet {
         System.out.println("Loading: " + file + "...");
         SPRITESHEET = new Sprite(loadSprite(file));
 
-        wSprite = SPRITESHEET.image.getWidth() / w;
-        hSprite = SPRITESHEET.image.getHeight() / h;
+        wSprite = SPRITESHEET.image.getWidth() / w; // the number of sprites in the width of the sprite sheet
+        hSprite = SPRITESHEET.image.getHeight() / h; // the number of sprites in the height of the sprite sheet
         loadSpriteArray();
     }
 
@@ -50,8 +50,8 @@ public class SpriteSheet {
         System.out.println("Loading: " + file + "...");
         SPRITESHEET = new Sprite(loadSprite(file));
 
-        wSprite = SPRITESHEET.image.getWidth() / w; // the 
-        hSprite = SPRITESHEET.image.getHeight() / h;
+        wSprite = SPRITESHEET.image.getWidth() / w; // the number of sprites in the width of the sprite sheet
+        hSprite = SPRITESHEET.image.getHeight() / h; // the number of sprites in the height of the sprite sheet
         loadSpriteArray();
     }
 
@@ -74,11 +74,11 @@ public class SpriteSheet {
     }
 
     private void loadSpriteArray() {
-        spriteArray = new Sprite[wSprite];
+        spriteArray = new Sprite[wSprite * hSprite];
 
         for (int y = 0; y < hSprite; y++) {
             for (int x = 0; x < wSprite; x++) {
-                spriteArray[x] = getSprite(x, y);
+                spriteArray[x + y * wSprite] = getSprite(x, y);
             }
         }
     }

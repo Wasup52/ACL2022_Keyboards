@@ -103,6 +103,12 @@ public class Painter implements GamePainter {
 				}
 			}
 		}
+
+		// if the game is paused, draw a black rectangle over the screen
+		if (game.isPaused) {
+			g.setColor(new Color(0, 0, 0, 150));
+			g.fillRect(0, 0, Global.WIDTH, Global.HEIGHT);
+		}
 	}
 
 	@Override

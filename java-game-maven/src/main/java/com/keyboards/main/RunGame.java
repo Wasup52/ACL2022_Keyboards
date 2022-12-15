@@ -35,6 +35,7 @@ public class RunGame implements Game {
 	
 	int keyCooldown = Global.KEY_COOLDOWN;
 
+	boolean isPaused = false;
 	boolean isFinished = false;
 	boolean inventoryOpen = false;
 	
@@ -92,9 +93,27 @@ public class RunGame implements Game {
 	public void evolve(HashMap<String, Boolean> commands, GameMouseHandler mouse) {
 		
 		keyCooldown--;
+
+		if (!inventoryOpen) {
+			if (!isPaused) {
+				if (commands.get("ESCAPE")) {
+					if (keyCooldown <= 0) {
+						isPaused = true;
+						keyCooldown = Global.KEY_COOLDOWN;
+					}
+				}
+			} else {
+				if (commands.get("ESCAPE")) {
+					if (keyCooldown <= 0) {
+						isPaused = false;
+						keyCooldown = Global.KEY_COOLDOWN;
+					}
+				}
+			}
+		}
 		
 		// if an inventory is open the player can't do anything else
-		if (!inventoryOpen && !player.isDead()) {
+		if (!inventoryOpen && !player.isDead() && !isPaused) {
 			if (commands.get("UP")) {
 				player.moveUp();
 				player.playFootStepGrassSound();
@@ -193,11 +212,15 @@ public class RunGame implements Game {
 
 		for (int i=0; i < mobs.size(); i++) {
 			Mob mob = mobs.get(i);
-			mob.update(player);
-			if (mob.isFaded()) {
-				entities.remove(mob);
-				mobs.remove(mob);
-				i--;
+			if (!isPaused) {
+				mob.update(player);
+				if (mob.isFaded()) {
+					entities.remove(mob);
+					mobs.remove(mob);
+					i--;
+				}
+			} else {
+				mob.idle();
 			}
 		}
 	}

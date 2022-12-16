@@ -35,8 +35,20 @@ public abstract class Mob extends Character{
         initPathFinding();
 	}
 
+    public Mob(int col, int row, Tile[][] mapTiles, boolean hasCollision) {
+        super(col, row, mapTiles, hasCollision);
+
+        initPathFinding();
+    }
+
     public Mob(Tile[][] mapTiles) {
 		super(mapTiles);
+
+        initPathFinding();
+	}
+
+    public Mob(Tile[][] mapTiles, boolean hasCollision) {
+		super(mapTiles, hasCollision);
 
         initPathFinding();
 	}
@@ -74,7 +86,7 @@ public abstract class Mob extends Character{
             for (int x = 0; x < Global.WORLD_COL_NUM; x++) {
                 int nx = x * Global.TILE_SIZE;
                 int ny = y * Global.TILE_SIZE;
-                if (mapTiles[y][x].isSolid()) {
+                if (mapTiles[y][x].isSolid() && hasCollision) {
                     // output += "solid ";
                     Node node = new Node(new Point(nx, ny));
                     node.setBlocked(true);

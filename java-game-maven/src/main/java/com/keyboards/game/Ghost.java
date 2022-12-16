@@ -15,11 +15,11 @@ import com.keyboards.tile.Tile;
 public class Ghost extends Mob {
 
     public Ghost(int col, int row, Tile[][] mapTiles) {
-        super(col, row, mapTiles);
+        super(col, row, mapTiles, false);
     }
 
     public Ghost(Tile[][] mapTiles) {
-        super(mapTiles);
+        super(mapTiles, false);
     }
 
     protected void initStats() {

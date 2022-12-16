@@ -57,6 +57,8 @@ public abstract class Character extends Entity{
     private int fadeTimer = FADE_TIME;
     private float alphaValue = 1;
 
+	boolean hasCollision = true;
+
 	public Character(int col, int row, Tile[][] mapTiles) {
 		this.mapTiles = mapTiles;
 		
@@ -84,8 +86,45 @@ public abstract class Character extends Entity{
 		solidBox.y = position.y + solidBoxCornersOffset.y;
 	}
 
+	public Character(int col, int row, Tile[][] mapTiles, boolean hasCollision) {
+		this.mapTiles = mapTiles;
+		this.hasCollision = hasCollision;
+		
+		if (col < 0 || col >= mapTiles.length || row < 0 || row >= mapTiles[0].length) {
+			throw new IllegalArgumentException("The character is out of the map");
+		}
+		
+		if (mapTiles[row][col].isSolid()) {
+			System.out.println("The chosen tile is solid, placing the character randomly");
+			placeRandomly(mapTiles);
+		}
+		
+		init();
+
+		// place the character hitbox in the middle of the tile
+		position.x = col * Global.TILE_SIZE + Global.TILE_SIZE / 2 - hitbox.width / 2 - hitBoxCornersOffset.x;
+		position.y = row * Global.TILE_SIZE + Global.TILE_SIZE / 2 - hitbox.height / 2 - hitBoxCornersOffset.y;
+
+		// update the hitbox position
+		hitbox.x = position.x + hitBoxCornersOffset.x;
+		hitbox.y = position.y + hitBoxCornersOffset.y;
+
+		// update the solidbox position
+		solidBox.x = position.x + solidBoxCornersOffset.x;
+		solidBox.y = position.y + solidBoxCornersOffset.y;
+	}
+
 	public Character(Tile[][] mapTiles) {
 		this.mapTiles = mapTiles;
+
+		init();
+
+		placeRandomly(mapTiles);
+	}
+
+	public Character(Tile[][] mapTiles, boolean hasCollision) {
+		this.mapTiles = mapTiles;
+		this.hasCollision = hasCollision;
 
 		init();
 
@@ -238,7 +277,7 @@ public abstract class Character extends Entity{
 			return false;
 		}
 
-
+		boolean collids = false;
 		for (int i = 0; i < surondingTiles.length; i++) {
 			if (surondingTiles[i] != null) {
 				// if the tile is solid, check if the character is colliding with it
@@ -251,11 +290,21 @@ public abstract class Character extends Entity{
 
 					// if the predicted position collides with the tile, return false
 					if (surondingTiles[i].collidsWith(predictedSolidBox)) {
-						return false;
+						collids = true;
+						if (hasCollision) {
+							return false;
+						}
 					}
 				}
 			}
 		}
+
+		if (collids) {
+			alphaValue = 0.5f;
+		} else {
+			alphaValue = 1f;
+		}
+		
 		return true;
 	}
 	
@@ -364,8 +413,8 @@ public abstract class Character extends Entity{
 	}
 	
 	public void playFootStepGrassSound() {
-	footStepGrassSound.play();
-}
+		footStepGrassSound.play();
+	}
 
 	private void fade() {
         fadeTimer--;
@@ -392,8 +441,6 @@ public abstract class Character extends Entity{
 				}
 			} else {
 				if (!isFaded()) { fade(); }
-
-				g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alphaValue));
 
 				if (direction == LEFT || lastDirection == LEFT) {
 					image = deathLeft.getLastFrameSprite().image;
@@ -428,8 +475,13 @@ public abstract class Character extends Entity{
 				isAttacking = false;
 			}
 		}
-		
+
+		if (alphaValue != 1) {
+			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alphaValue));
+		}
+
 		g.drawImage(image, position.x, position.y, image.getHeight()*SCALE_FACTOR, image.getWidth()*SCALE_FACTOR, null);
+		
 		if (alphaValue != 1) {
 			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 		}

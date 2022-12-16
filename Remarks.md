@@ -11,3 +11,6 @@
 (Le seule groupe qui ne m'ajoute pas au git) 
 
 # Sprint 3
+- Diagramme de classes : ok
+- Diagramme de séquence : manque la boucle du jeu, fin jeu ?
+- Pas de préparation de Sprint 4

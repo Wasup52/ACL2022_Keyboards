@@ -19,6 +19,7 @@ This is a 2D game made in Java for a student project.
 - [Backlog 1](Backlog1.md)
 - [Backlog 2](Backlog2.md)
 - [Backlog 3](Backlog3.md)
+- [Backlog 4](Backlog4.md)
 
 &nbsp;
 ## Documentation

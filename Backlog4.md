@@ -15,3 +15,17 @@
 - Loric : test Junit base déplacement
 - Audrey : test Junit dégats
 - Antoine : Cases spécial
+
+## Diagramme de classes
+
+![Diagramme de classes](images/ClassDiagramSprint3.png)
+
+## Diagramme de séquence
+
+**Fonctionalitée launch :**
+
+![Diagramme de sequence launch](images/fonctionnalité_launch_prévisionelle.jpg)
+
+**Fonctionalitée evolve :**
+
+![Diagramme de sequence evolve](images/fonctionnalité_evolve_prévisionelle.jpg)

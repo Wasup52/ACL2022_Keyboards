@@ -1,6 +1,8 @@
 package com.keyboards.tile;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -199,12 +201,14 @@ public class TileManager {
 		}
 	}
 
-	public void draw(Graphics2D g) {
+	public void draw(Graphics2D g, Point playerWorldPos, Point playerScreenPos) {
 
-		for (int row = 0; row < Global.WORLD_ROW_NUM; row++) {
-			for (int col = 0; col < Global.WORLD_COL_NUM; col++) {
-				if (mapTiles[row][col] != null) {
-					mapTiles[row][col].draw(g, col, row);
+		for (int worldRow = 0; worldRow < Global.WORLD_ROW_NUM; worldRow++) {
+			for (int worldCol = 0; worldCol < Global.WORLD_COL_NUM; worldCol++) {
+				if (mapTiles[worldRow][worldCol] != null && mapTiles[worldRow][worldCol].needToBeDrawn(worldCol, worldRow, playerWorldPos, playerScreenPos)) {
+					mapTiles[worldRow][worldCol].draw(g, worldCol, worldRow, playerWorldPos, playerScreenPos);
+				} else {
+					Tile.drawBlankTile(g, worldCol, worldRow, playerWorldPos, playerScreenPos);
 				}
 			}
 		}

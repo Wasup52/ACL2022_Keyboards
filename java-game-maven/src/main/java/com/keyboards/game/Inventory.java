@@ -32,7 +32,7 @@ public class Inventory {
         this.total_width = Global.TILE_SIZE * inventory[0].length + BORDER_SPACING*2 + BETWEEN_ITEM_SPACING*(inventory[0].length-1);
         this.total_height = Global.TILE_SIZE * inventory.length + BORDER_SPACING*2 + BETWEEN_ITEM_SPACING*(inventory.length-1);
 
-        this.position = new Point(Global.WIDTH/2 - total_width/2, Global.HEIGHT/2 - total_height/2);
+        this.position = new Point(Global.SCREEN_WIDTH/2 - total_width/2, Global.SCREEN_HEIGHT/2 - total_height/2);
     }
 
     public void addItem(Item item) {
@@ -155,7 +155,7 @@ public class Inventory {
 
                 x += BETWEEN_ITEM_SPACING;
             }
-            x = (Global.WIDTH - total_width) / 2 + BORDER_SPACING;
+            x = (Global.SCREEN_WIDTH - total_width) / 2 + BORDER_SPACING;
             y += BETWEEN_ITEM_SPACING;
         }
 

@@ -33,18 +33,18 @@ public class Zombie extends Mob {
 
     protected void initHitBox() {
         hitBoxCornersOffset = new Point(9*SCALE_FACTOR, 7*SCALE_FACTOR);
-        hitbox = new Rectangle(position.x + hitBoxCornersOffset.x, position.y + hitBoxCornersOffset.y, 12*SCALE_FACTOR, 17*SCALE_FACTOR);
+        hitbox = new Rectangle(worldPosition.x + hitBoxCornersOffset.x, worldPosition.y + hitBoxCornersOffset.y, 12*SCALE_FACTOR, 17*SCALE_FACTOR);
 
         attackLeftHitBoxCornersOffset = new Point(2*SCALE_FACTOR, 8*SCALE_FACTOR);
-        attackLeftHitbox = new Rectangle(position.x + attackLeftHitBoxCornersOffset.x, position.y + attackLeftHitBoxCornersOffset.y, 12*SCALE_FACTOR, 15*SCALE_FACTOR);
+        attackLeftHitbox = new Rectangle(worldPosition.x + attackLeftHitBoxCornersOffset.x, worldPosition.y + attackLeftHitBoxCornersOffset.y, 12*SCALE_FACTOR, 15*SCALE_FACTOR);
 
         attackRightHitBoxCornersOffset = new Point(9*SCALE_FACTOR, 7*SCALE_FACTOR);
-        attackRightHitbox = new Rectangle(position.x + attackRightHitBoxCornersOffset.x, position.y + attackRightHitBoxCornersOffset.y, 12*SCALE_FACTOR, 17*SCALE_FACTOR);
+        attackRightHitbox = new Rectangle(worldPosition.x + attackRightHitBoxCornersOffset.x, worldPosition.y + attackRightHitBoxCornersOffset.y, 12*SCALE_FACTOR, 17*SCALE_FACTOR);
     }
 
     protected void initSolidBox() {
         solidBoxCornersOffset = new Point(9*SCALE_FACTOR, 7*SCALE_FACTOR);
-        solidBox = new Rectangle(position.x + solidBoxCornersOffset.x, position.y + solidBoxCornersOffset.y, 12*SCALE_FACTOR, 17*SCALE_FACTOR);
+        solidBox = new Rectangle(worldPosition.x + solidBoxCornersOffset.x, worldPosition.y + solidBoxCornersOffset.y, 12*SCALE_FACTOR, 17*SCALE_FACTOR);
     }
 
     protected void initSprites() {

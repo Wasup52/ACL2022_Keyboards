@@ -165,8 +165,8 @@ public abstract class Mob extends Character{
             this.nextPoint = nextNode.getObj();
             int nextX = nextPoint.x;
             int nextY = nextPoint.y;
-            int dx = nextX - position.x;
-            int dy = nextY - position.y;
+            int dx = nextX - worldPosition.x;
+            int dy = nextY - worldPosition.y;
             if (dx > 0) {
                 moveRight();
             }
@@ -184,7 +184,7 @@ public abstract class Mob extends Character{
         }
     }
 
-    private void drawNode(Graphics2D g, Node<Point> node) {
+    private void drawNode(Graphics2D g, Node<Point> node, Point playerWorldPos, Point playerScreenPos) {
         Color color = Color.BLACK;
         
         switch (node.getState()) {
@@ -216,14 +216,14 @@ public abstract class Mob extends Character{
         }
 
         g.setColor(color);
-        int rx = node.getObj().x;
-        int ry = node.getObj().y;
-        g.fillRect(rx, ry, Global.TILE_SIZE, Global.TILE_SIZE);
+        int sceenX = node.getObj().x - playerWorldPos.x + playerScreenPos.x;
+        int sceenY = node.getObj().y - playerWorldPos.y + playerScreenPos.y;
+        g.fillRect(sceenX, sceenY, Global.TILE_SIZE, Global.TILE_SIZE);
         g.setColor(Color.BLACK);
-        g.drawRect(rx, ry, Global.TILE_SIZE, Global.TILE_SIZE);
+        g.drawRect(sceenX, sceenY, Global.TILE_SIZE, Global.TILE_SIZE);
     }
     
-    private void drawPath(Graphics2D g) {
+    private void drawPath(Graphics2D g, Point playerWorldPos, Point playerScreenPos) {
         Stroke originalStroke = g.getStroke();
         g.setColor(Color.BLUE);
         g.setStroke(pathStroke);
@@ -232,9 +232,13 @@ public abstract class Mob extends Character{
             Node<Point> b = path.get(i + 1);
             int x1 = a.getObj().x + Global.TILE_SIZE / 2;
             int y1 = a.getObj().y + Global.TILE_SIZE / 2;
+            int screenX1 = x1 - playerWorldPos.x + playerScreenPos.x;
+            int screenY1 = y1 - playerWorldPos.y + playerScreenPos.y;
             int x2 = b.getObj().x + Global.TILE_SIZE / 2;
             int y2 = b.getObj().y + Global.TILE_SIZE / 2;
-            g.drawLine(x1, y1, x2, y2);
+            int screenX2 = x2 - playerWorldPos.x + playerScreenPos.x;
+            int screenY2 = y2 - playerWorldPos.y + playerScreenPos.y;
+            g.drawLine(screenX1, screenY1, screenX2, screenY2);
         }
         g.setStroke(originalStroke);
     }
@@ -244,29 +248,37 @@ public abstract class Mob extends Character{
             moveTowards(player);
 
             if (canAttack(player)) {
-                attack(player);
+                if (!Global.PLAYER_INVINCIBLE) {
+                    System.out.println("attacking player");
+                    attack(player);
+                } else {
+                    System.out.println("player is invincible");
+                }
             }
         }
     }
 
-    public void draw(Graphics2D g) {
+    public void draw(Graphics2D g, Point playerWorldPos, Point playerScreenPos) {
         if (Global.DEBUG && path != null) {
             // draw the nodes (diffrent colors for different states (open, closed, unvisited, start, target, blocked))
             for (Node<Point> node : graph.getNodes()) {
-                drawNode(g, node);
+                drawNode(g, node, playerWorldPos, playerScreenPos);
             }
         }
 
-        drawPath(g);
+        drawPath(g, playerWorldPos, playerScreenPos);
 
         // draw the next point
         if (nextPoint != null) {
+            int screenX = nextPoint.x - playerWorldPos.x + playerScreenPos.x;
+            int screenY = nextPoint.y - playerWorldPos.y + playerScreenPos.y;
+
             g.setColor(Color.RED);
             int r = 5;
-            g.fillOval(nextPoint.x + Global.TILE_SIZE / 2 - r / 2, nextPoint.y + Global.TILE_SIZE / 2 - r / 2, r, r);
+            g.fillOval(screenX + Global.TILE_SIZE / 2 - r / 2, screenY + Global.TILE_SIZE / 2 - r / 2, r, r);
         }
 
-        super.draw(g);
+        super.draw(g, playerWorldPos, playerScreenPos);
     }
     
 }

@@ -34,8 +34,11 @@ public abstract class Character extends Entity{
 	public int direction = IDLE;
 	
 	public Rectangle attackLeftHitbox = new Rectangle();
+	public Rectangle screenAttackLeftHitbox = new Rectangle();
 	public Point attackLeftHitBoxCornersOffset = new Point();
+
 	public Rectangle attackRightHitbox = new Rectangle();
+	public Rectangle screenAttackRightHitbox = new Rectangle();
 	public Point attackRightHitBoxCornersOffset = new Point();
 
 	Animation idleLeft;
@@ -55,7 +58,7 @@ public abstract class Character extends Entity{
 
 	private final int FADE_TIME = 60;
     private int fadeTimer = FADE_TIME;
-    private float alphaValue = 1;
+    protected float alphaValue = 1;
 
 	boolean hasCollision = true;
 
@@ -74,16 +77,16 @@ public abstract class Character extends Entity{
 		init();
 
 		// place the character hitbox in the middle of the tile
-		position.x = col * Global.TILE_SIZE + Global.TILE_SIZE / 2 - hitbox.width / 2 - hitBoxCornersOffset.x;
-		position.y = row * Global.TILE_SIZE + Global.TILE_SIZE / 2 - hitbox.height / 2 - hitBoxCornersOffset.y;
+		worldPosition.x = col * Global.TILE_SIZE + Global.TILE_SIZE / 2 - hitbox.width / 2 - hitBoxCornersOffset.x;
+		worldPosition.y = row * Global.TILE_SIZE + Global.TILE_SIZE / 2 - hitbox.height / 2 - hitBoxCornersOffset.y;
 
 		// update the hitbox position
-		hitbox.x = position.x + hitBoxCornersOffset.x;
-		hitbox.y = position.y + hitBoxCornersOffset.y;
+		hitbox.x = worldPosition.x + hitBoxCornersOffset.x;
+		hitbox.y = worldPosition.y + hitBoxCornersOffset.y;
 
 		// update the solidbox position
-		solidBox.x = position.x + solidBoxCornersOffset.x;
-		solidBox.y = position.y + solidBoxCornersOffset.y;
+		solidBox.x = worldPosition.x + solidBoxCornersOffset.x;
+		solidBox.y = worldPosition.y + solidBoxCornersOffset.y;
 	}
 
 	public Character(int col, int row, Tile[][] mapTiles, boolean hasCollision) {
@@ -102,16 +105,16 @@ public abstract class Character extends Entity{
 		init();
 
 		// place the character hitbox in the middle of the tile
-		position.x = col * Global.TILE_SIZE + Global.TILE_SIZE / 2 - hitbox.width / 2 - hitBoxCornersOffset.x;
-		position.y = row * Global.TILE_SIZE + Global.TILE_SIZE / 2 - hitbox.height / 2 - hitBoxCornersOffset.y;
+		worldPosition.x = col * Global.TILE_SIZE + Global.TILE_SIZE / 2 - hitbox.width / 2 - hitBoxCornersOffset.x;
+		worldPosition.y = row * Global.TILE_SIZE + Global.TILE_SIZE / 2 - hitbox.height / 2 - hitBoxCornersOffset.y;
 
 		// update the hitbox position
-		hitbox.x = position.x + hitBoxCornersOffset.x;
-		hitbox.y = position.y + hitBoxCornersOffset.y;
+		hitbox.x = worldPosition.x + hitBoxCornersOffset.x;
+		hitbox.y = worldPosition.y + hitBoxCornersOffset.y;
 
 		// update the solidbox position
-		solidBox.x = position.x + solidBoxCornersOffset.x;
-		solidBox.y = position.y + solidBoxCornersOffset.y;
+		solidBox.x = worldPosition.x + solidBoxCornersOffset.x;
+		solidBox.y = worldPosition.y + solidBoxCornersOffset.y;
 	}
 
 	public Character(Tile[][] mapTiles) {
@@ -132,26 +135,26 @@ public abstract class Character extends Entity{
 	}
 
 	private void placeRandomly(Tile[][] mapTiles) {
-		int col = (int) (Math.random() * Global.COL_NUM);
-		int row = (int) (Math.random() * Global.ROW_NUM);
+		int col = (int) (Math.random() * Global.WORLD_COL_NUM);
+		int row = (int) (Math.random() * Global.WORLD_ROW_NUM);
 		
 		// try while the randomly chosen tile is solid or null
 		while (mapTiles[row][col].isSolid()) {
-			col = (int) (Math.random() * Global.COL_NUM);
-			row = (int) (Math.random() * Global.ROW_NUM);
+			col = (int) (Math.random() * Global.WORLD_COL_NUM);
+			row = (int) (Math.random() * Global.WORLD_ROW_NUM);
 		}
 
 		// place the character in the middle of the tile
-		position.x = col * Global.TILE_SIZE + Global.TILE_SIZE / 2 - hitbox.width / 2 - hitBoxCornersOffset.x;
-		position.y = row * Global.TILE_SIZE + Global.TILE_SIZE / 2 - hitbox.height / 2 - hitBoxCornersOffset.y;
+		worldPosition.x = col * Global.TILE_SIZE + Global.TILE_SIZE / 2 - hitbox.width / 2 - hitBoxCornersOffset.x;
+		worldPosition.y = row * Global.TILE_SIZE + Global.TILE_SIZE / 2 - hitbox.height / 2 - hitBoxCornersOffset.y;
 
 		// update the hitbox position
-		hitbox.x = position.x + hitBoxCornersOffset.x;
-		hitbox.y = position.y + hitBoxCornersOffset.y;
+		hitbox.x = worldPosition.x + hitBoxCornersOffset.x;
+		hitbox.y = worldPosition.y + hitBoxCornersOffset.y;
 
 		// update the solidbox position
-		solidBox.x = position.x + solidBoxCornersOffset.x;
-		solidBox.y = position.y + solidBoxCornersOffset.y;
+		solidBox.x = worldPosition.x + solidBoxCornersOffset.x;
+		solidBox.y = worldPosition.y + solidBoxCornersOffset.y;
 
 		System.out.println("Placed " + this + " at " + col + ", " + row);
 	}
@@ -188,7 +191,7 @@ public abstract class Character extends Entity{
         int topTileRow = topY / Global.TILE_SIZE;
         int bottomTileRow = bottomY / Global.TILE_SIZE;
 
-		if (leftTileCol >= 0 && rightTileCol < Global.COL_NUM && topTileRow >= 0 && bottomTileRow < Global.ROW_NUM ) {
+		if (leftTileCol >= 0 && rightTileCol < Global.WORLD_COL_NUM && topTileRow >= 0 && bottomTileRow < Global.WORLD_ROW_NUM ) {
 			surroundingTiles[0] = mapTiles[topTileRow][leftTileCol]; // top left
 			surroundingTiles[1] = mapTiles[topTileRow][rightTileCol]; // top right
 			surroundingTiles[2] = mapTiles[bottomTileRow][leftTileCol]; // bottom left
@@ -236,8 +239,8 @@ public abstract class Character extends Entity{
 	public void move(int x, int y) {
 		if (canMove(x, y)) {
 			// move the character
-			this.position.x = x;
-			this.position.y = y;
+			this.worldPosition.x = x;
+			this.worldPosition.y = y;
 			// update the hit box
 			this.hitbox.x = x + hitBoxCornersOffset.x;
 			this.hitbox.y = y + hitBoxCornersOffset.y;
@@ -272,8 +275,11 @@ public abstract class Character extends Entity{
 		predictedHitBox.y = y + hitBoxCornersOffset.y;
 
 		// check if predicted solid box if out of the map
-		if (predictedHitBox.x < 0 || predictedHitBox.x + predictedHitBox.width > Global.WIDTH
-				|| predictedHitBox.y < 0 || predictedHitBox.y + predictedHitBox.height > Global.HEIGHT) {
+		if (predictedHitBox.x < 0 || predictedHitBox.x + predictedHitBox.width > Global.WORLD_WIDTH
+				|| predictedHitBox.y < 0 || predictedHitBox.y + predictedHitBox.height > Global.WORLD_HEIGHT) {
+			if (this instanceof Player) {
+				System.out.println("out of map");
+			}
 			return false;
 		}
 
@@ -290,6 +296,9 @@ public abstract class Character extends Entity{
 
 					// if the predicted position collides with the tile, return false
 					if (surondingTiles[i].collidsWith(predictedSolidBox)) {
+						if (this instanceof Player) {
+							System.out.println("colliding with tile: " + surondingTiles[i]);
+						}
 						collids = true;
 						if (hasCollision) {
 							return false;
@@ -313,9 +322,9 @@ public abstract class Character extends Entity{
 	 */
 	public void moveUp() {
 		if (isSprinting) {
-			move(position.x, position.y - sprintSpeed);
+			move(worldPosition.x, worldPosition.y - sprintSpeed);
 		} else {
-			move(position.x, position.y - speed);
+			move(worldPosition.x, worldPosition.y - speed);
 		}
 		direction = lastDirection;
     }
@@ -325,9 +334,9 @@ public abstract class Character extends Entity{
 	 */
 	public void moveDown() {
 		if (isSprinting) {
-			move(position.x, position.y + sprintSpeed);
+			move(worldPosition.x, worldPosition.y + sprintSpeed);
 		} else {
-			move(position.x, position.y + speed);
+			move(worldPosition.x, worldPosition.y + speed);
 		}
 		direction = lastDirection;
 	}
@@ -337,9 +346,9 @@ public abstract class Character extends Entity{
 	 */
 	public void moveLeft() {
 		if (isSprinting) {
-			move(position.x - sprintSpeed, position.y);
+			move(worldPosition.x - sprintSpeed, worldPosition.y);
 		} else {
-			move(position.x - speed, position.y);
+			move(worldPosition.x - speed, worldPosition.y);
 		}
 		direction = LEFT;
 		lastDirection = LEFT;
@@ -350,9 +359,9 @@ public abstract class Character extends Entity{
 	 */
 	public void moveRight() {
 		if (isSprinting) {
-			move(position.x + sprintSpeed, position.y);
+			move(worldPosition.x + sprintSpeed, worldPosition.y);
 		} else {
-			move(position.x + speed, position.y);
+			move(worldPosition.x + speed, worldPosition.y);
 		}
 		direction = RIGHT;
 		lastDirection = RIGHT;
@@ -416,7 +425,7 @@ public abstract class Character extends Entity{
 		footStepGrassSound.play();
 	}
 
-	private void fade() {
+	protected void fade() {
         fadeTimer--;
         alphaValue = (float) fadeTimer / (float) FADE_TIME;
     }
@@ -425,7 +434,7 @@ public abstract class Character extends Entity{
         return fadeTimer <= 0;
     }
 	
-	public void draw(Graphics2D g) {
+	public void draw(Graphics2D g, Point playerWorldPos, Point playerScreenPos) {
 		attackCooldown--;
 
 		BufferedImage image = null;
@@ -464,11 +473,11 @@ public abstract class Character extends Entity{
 			}
 	
 			if ((direction == LEFT || lastDirection == LEFT) && isAttacking) {
-				image = attackLeft.getSprite().image;
 				attackLeft.update();
+				image = attackLeft.getSprite().image;
 			} else if ((direction == RIGHT || lastDirection == RIGHT) && isAttacking) {
-				image = attackRight.getSprite().image;
 				attackRight.update();
+				image = attackRight.getSprite().image;
 			}
 	
 			if (isAttacking && (attackLeft.reachedEndFrame() || attackRight.reachedEndFrame())) {
@@ -480,7 +489,22 @@ public abstract class Character extends Entity{
 			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alphaValue));
 		}
 
-		g.drawImage(image, position.x, position.y, image.getHeight()*SCALE_FACTOR, image.getWidth()*SCALE_FACTOR, null);
+		screenPosition.x = worldPosition.x - playerWorldPos.x + playerScreenPos.x;
+		screenPosition.y = worldPosition.y - playerWorldPos.y + playerScreenPos.y;
+		
+		screenHitbox.x = screenPosition.x + hitBoxCornersOffset.x;
+		screenHitbox.y = screenPosition.y + hitBoxCornersOffset.y;
+
+		screenSolidBox.x = screenPosition.x + solidBoxCornersOffset.x;
+		screenSolidBox.y = screenPosition.y + solidBoxCornersOffset.y;
+
+		screenAttackLeftHitbox.x = screenPosition.x + attackLeftHitBoxCornersOffset.x;
+		screenAttackLeftHitbox.y = screenPosition.y + attackLeftHitBoxCornersOffset.y;
+
+		screenAttackRightHitbox.x = screenPosition.x + attackRightHitBoxCornersOffset.x;
+		screenAttackRightHitbox.y = screenPosition.y + attackRightHitBoxCornersOffset.y;
+
+		g.drawImage(image, screenPosition.x, screenPosition.y, image.getHeight()*SCALE_FACTOR, image.getWidth()*SCALE_FACTOR, null);
 		
 		if (alphaValue != 1) {
 			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
@@ -500,24 +524,24 @@ public abstract class Character extends Entity{
 			// draw a filled circle centered at x, y
         	g.setColor(Color.RED);
 			int r = 5;
-			g.fillOval(position.x - r, position.y - r, r * 2, r * 2);
+			g.fillOval(screenPosition.x - r, screenPosition.y - r, r * 2, r * 2);
             
         	// draw hitbox
         	g.setColor(Color.BLUE);
-        	g.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+        	g.drawRect(screenHitbox.x, screenHitbox.y, hitbox.width, hitbox.height);
 
         	// draw solidbox
         	g.setColor(Color.GREEN);
-        	g.drawRect(solidBox.x, solidBox.y, solidBox.width, solidBox.height);
+        	g.drawRect(screenSolidBox.x, screenSolidBox.y, solidBox.width, solidBox.height);
         	
         	// draw attackHitbox
         	if (true) {
         		g.setColor(Color.RED);
         		if (direction == LEFT || lastDirection == LEFT) {
-        			g.drawRect(attackLeftHitbox.x, attackLeftHitbox.y, attackLeftHitbox.width, attackLeftHitbox.height);
+        			g.drawRect(screenAttackLeftHitbox.x, screenAttackLeftHitbox.y, attackLeftHitbox.width, attackLeftHitbox.height);
         		}
         		if (direction == RIGHT || lastDirection == RIGHT) {
-        			g.drawRect(attackRightHitbox.x, attackRightHitbox.y, attackRightHitbox.width, attackRightHitbox.height);
+        			g.drawRect(screenAttackRightHitbox.x, screenAttackRightHitbox.y, attackRightHitbox.width, attackRightHitbox.height);
         		}
         	}
         }

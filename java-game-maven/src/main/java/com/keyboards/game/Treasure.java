@@ -24,12 +24,12 @@ public class Treasure extends Object {
 
     public void initHitBox() {
         hitBoxCornersOffset = new Point(0,0 );
-        hitbox = new Rectangle(position.x-(this.image.getHeight()/2)*2, position.y-2*(this.image.getWidth()/2),this.image.getHeight()*2 - hitBoxCornersOffset.x*2,this.image.getWidth()*2- hitBoxCornersOffset.y*2);
+        hitbox = new Rectangle(worldPosition.x-(this.image.getHeight()/2)*2, worldPosition.y-2*(this.image.getWidth()/2),this.image.getHeight()*2 - hitBoxCornersOffset.x*2,this.image.getWidth()*2- hitBoxCornersOffset.y*2);
     }
 
     public void initSolidBox() {
         solidBoxCornersOffset = new Point(0,0);
-        solidBox = new Rectangle(position.x-(this.image.getHeight()/2)*2, position.y-(this.image.getWidth()/2)*2,this.image.getHeight()*2 - hitBoxCornersOffset.x*2,this.image.getWidth()*2- hitBoxCornersOffset.y*2);
+        solidBox = new Rectangle(worldPosition.x-(this.image.getHeight()/2)*2, worldPosition.y-(this.image.getWidth()/2)*2,this.image.getHeight()*2 - hitBoxCornersOffset.x*2,this.image.getWidth()*2- hitBoxCornersOffset.y*2);
     }
 
     
@@ -45,8 +45,11 @@ public class Treasure extends Object {
 		treasureSound.play();
 	}
     
-    public void draw(Graphics2D g) {
-        g.drawImage(this.image, position.x-(this.image.getHeight()/2)*2, position.y-(this.image.getWidth()/2)*2,this.image.getHeight()*2,image.getWidth()*2, null);
+    public void draw(Graphics2D g, Point playerWorldPos, Point playerScreenPos) {
+        int screenX = worldPosition.x - playerWorldPos.x + playerScreenPos.x;
+        int screenY = worldPosition.y - playerWorldPos.y + playerScreenPos.y;
+
+        g.drawImage(this.image, screenX-(this.image.getHeight()/2)*2, screenY-(this.image.getWidth()/2)*2,this.image.getHeight()*2,image.getWidth()*2, null);
         
         if (Global.DEBUG) {
 			g.setColor(Color.BLUE);

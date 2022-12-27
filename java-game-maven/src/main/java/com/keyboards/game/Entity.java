@@ -7,14 +7,20 @@ import java.awt.Rectangle;
 import com.keyboards.global.Global;
 
 public abstract class Entity {
-	public Point position = new Point(0,0);
-	public Rectangle hitbox;
-	public Point hitBoxCornersOffset;
-	public Rectangle solidBox;
-	public Point solidBoxCornersOffset;
-	public boolean hasInventory = false;
-	public abstract void draw(Graphics2D g);
+	public Point worldPosition = new Point(0,0);
+	public Point screenPosition = new Point(0,0);
 
+	public Rectangle hitbox = new Rectangle();
+	public Rectangle screenHitbox = new Rectangle();
+	public Point hitBoxCornersOffset = new Point(0,0);
+
+	public Rectangle solidBox = new Rectangle();
+	public Rectangle screenSolidBox = new Rectangle();
+	public Point solidBoxCornersOffset = new Point(0,0);
+
+	public boolean hasInventory = false;
+
+	public abstract void draw(Graphics2D g, Point playerWorldPos, Point playerScreenPos);
 
 	/**
 	 * @return The col the entity is in

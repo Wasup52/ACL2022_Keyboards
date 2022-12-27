@@ -2,6 +2,7 @@ package com.keyboards.main;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.Collections;
 import java.util.Comparator;
@@ -37,16 +38,16 @@ public class Painter implements GamePainter {
 	}
 	
 	
-	private void drawGrid(Graphics2D g) {
+	private void drawGrid(Graphics2D g, Point playerWorldPos, Point playerScreenPos) {
         Stroke oldStroke = g.getStroke();
 
         g.setStroke(tileStroke);
         g.setColor(new Color(78, 108, 80));
-        for (int y = 0; y < Global.ROW_NUM; y++) {
-            for (int x = 0; x < Global.COL_NUM; x++) {
-                int nx = x * Global.TILE_SIZE;
-                int ny = y * Global.TILE_SIZE;
-                g.drawRect(nx, ny, Global.TILE_SIZE, Global.TILE_SIZE);
+        for (int y = 0; y < Global.WORLD_ROW_NUM; y++) {
+            for (int x = 0; x < Global.WORLD_COL_NUM; x++) {
+                int screenX = x * Global.TILE_SIZE - playerWorldPos.x + playerScreenPos.x;
+                int screenY = y * Global.TILE_SIZE - playerWorldPos.y + playerScreenPos.y;
+                g.drawRect(screenX, screenY, Global.TILE_SIZE, Global.TILE_SIZE);
             }
         }
 
@@ -61,10 +62,10 @@ public class Painter implements GamePainter {
 		Graphics2D g = (Graphics2D) im.getGraphics();
 
 		// draw grid for tests
-        drawGrid(g);
+        drawGrid(g, game.player.worldPosition, game.player.screenPosition);
 
 		// draw the tiles
-		game.tileManager.draw(g);
+		game.tileManager.draw(g, game.player.worldPosition, game.player.screenPosition);
 		
 		// sort the entities by y position to draw them in the right order
 		Collections.sort(game.entities, new Comparator<Entity>() {
@@ -80,14 +81,14 @@ public class Painter implements GamePainter {
 			if (e instanceof Item) {
 				// don't draw the item on the board if it's in the inventory
 				if (!((Item) e).isInInventory) {
-					((Item) e).draw(g);
+					((Item) e).draw(g, game.player.worldPosition, game.player.screenPosition);
 				} else {
 					// remove the item from the entities array if it's in the inventory
 					game.entities.remove(i);
 					i--;
 				}
 			} else {
-				e.draw(g);
+				e.draw(g, game.player.worldPosition, game.player.screenPosition);
 			}
 		}
 
@@ -107,17 +108,17 @@ public class Painter implements GamePainter {
 		// if the game is paused, draw a black rectangle over the screen
 		if (game.isPaused) {
 			g.setColor(new Color(0, 0, 0, 150));
-			g.fillRect(0, 0, Global.WIDTH, Global.HEIGHT);
+			g.fillRect(0, 0, Global.SCREEN_WIDTH, Global.SCREEN_HEIGHT);
 		}
 	}
 
 	@Override
 	public int getWidth() {
-		return Global.WIDTH;
+		return Global.SCREEN_WIDTH;
 	}
 
 	@Override
 	public int getHeight() {
-		return Global.HEIGHT;
+		return Global.SCREEN_HEIGHT;
 	}
 }

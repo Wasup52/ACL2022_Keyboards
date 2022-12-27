@@ -42,12 +42,12 @@ public class Chest extends Object{
 
     public void initHitBox() {
         hitBoxCornersOffset = new Point(1,1 );
-        hitbox = new Rectangle(position.x-(spritesSize/2)*scale_factor, position.y-2*(spritesSize/2),spritesSize*scale_factor - hitBoxCornersOffset.x*scale_factor,spritesSize*scale_factor- hitBoxCornersOffset.y*scale_factor);
+        hitbox = new Rectangle(worldPosition.x-(spritesSize/2)*scale_factor, worldPosition.y-2*(spritesSize/2),spritesSize*scale_factor - hitBoxCornersOffset.x*scale_factor,spritesSize*scale_factor- hitBoxCornersOffset.y*scale_factor);
     }
 
     public void initSolidBox() {
         solidBoxCornersOffset = new Point(1,1);
-        solidBox = new Rectangle(position.x-(spritesSize/2)*scale_factor, position.y-(spritesSize/2)*scale_factor,spritesSize*scale_factor - hitBoxCornersOffset.x*scale_factor,spritesSize*scale_factor- hitBoxCornersOffset.y*scale_factor);
+        solidBox = new Rectangle(worldPosition.x-(spritesSize/2)*scale_factor, worldPosition.y-(spritesSize/2)*scale_factor,spritesSize*scale_factor - hitBoxCornersOffset.x*scale_factor,spritesSize*scale_factor- hitBoxCornersOffset.y*scale_factor);
     }
 
     protected void initSprites() {
@@ -85,8 +85,11 @@ public class Chest extends Object{
 		closeChestSound.play();
 	}
 
-    public void draw(Graphics2D g) {
+    public void draw(Graphics2D g, Point playerWorldPos, Point playerScreenPos) {
         BufferedImage image = null;
+
+        screenPosition.x = worldPosition.x-spritesSize/2*scale_factor - playerWorldPos.x + playerScreenPos.x;
+        screenPosition.y = worldPosition.y-spritesSize/2*scale_factor - playerWorldPos.y + playerScreenPos.y;
 
         if (opening || closing) {
             if (opening) {
@@ -108,25 +111,25 @@ public class Chest extends Object{
             }
 
             g.drawImage(image,
-                position.x-spritesSize/2*scale_factor,
-                position.y-spritesSize/2*scale_factor,
+                screenPosition.x,
+                screenPosition.y,
                 spritesSize*scale_factor,
                 spritesSize*scale_factor,
                 null
             );
         } else {
             if (inventory.isOpen()) {
-                g.drawImage(openedImage, 
-                    position.x-spritesSize/2*scale_factor, 
-                    position.y-spritesSize/2*scale_factor,
+                g.drawImage(openedImage,
+                    screenPosition.x,
+                    screenPosition.y,
                     spritesSize*scale_factor,
                     spritesSize*scale_factor,
                     null
                 );
             } else {
                 g.drawImage(closedImage,
-                    position.x-spritesSize/2*scale_factor,
-                    position.y-spritesSize/2*scale_factor,
+                    screenPosition.x,
+                    screenPosition.y,
                     spritesSize*scale_factor,
                     spritesSize*scale_factor,
                     null

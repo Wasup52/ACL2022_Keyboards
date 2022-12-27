@@ -32,36 +32,20 @@ public class Speed_potion extends Item {
 
 	public void initHitBox() {
 		hitBoxCornersOffset = new Point(3,3);
-		hitbox = new Rectangle(position.x-this.image.getHeight()/2, position.y-this.image.getWidth()/2,this.image.getHeight() - hitBoxCornersOffset.x,this.image.getWidth()- hitBoxCornersOffset.y);
+		hitbox = new Rectangle(worldPosition.x-this.image.getHeight()/2, worldPosition.y-this.image.getWidth()/2,this.image.getHeight() - hitBoxCornersOffset.x,this.image.getWidth()- hitBoxCornersOffset.y);
 	}
 
 	public void initSolidBox() {
 		solidBoxCornersOffset = new Point(3,3);
-		solidBox = new Rectangle(position.x-this.image.getHeight()/2, position.y-this.image.getWidth()/2,this.image.getHeight() - hitBoxCornersOffset.x,this.image.getWidth()- hitBoxCornersOffset.y);
+		solidBox = new Rectangle(worldPosition.x-this.image.getHeight()/2, worldPosition.y-this.image.getWidth()/2,this.image.getHeight() - hitBoxCornersOffset.x,this.image.getWidth()- hitBoxCornersOffset.y);
 	}
 
 	protected void initSprites() {
 		SpriteSheet Sprite = new SpriteSheet("res/Objects/Speed-potion.png", 32, 32);
 
 		sprite = Sprite.getSpriteArray();
-		this.image = sprite[0].image;
+		image = sprite[0].image;
 		
 		drinkingSound = new Sound("res/sound/drinkingSound.wav");
 	}
-
-
-	public void draw(Graphics2D g, int x, int y) {
-		g.drawImage(this.image, x, y,this.image.getHeight(),image.getWidth(), null);
-    }
-
-    public void draw(Graphics2D g) {
-        g.drawImage(this.image, position.x-this.image.getHeight()/2, position.y-this.image.getWidth()/2,this.image.getHeight(),image.getWidth(), null);
-
-		if (Global.DEBUG) {
-			g.setColor(Color.BLUE);
-			g.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
-			g.setColor(Color.RED);
-			g.drawRect(solidBox.x, solidBox.y, solidBox.width, solidBox.height);
-		}
-    }
 }

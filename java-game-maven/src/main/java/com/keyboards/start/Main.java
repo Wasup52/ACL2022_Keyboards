@@ -13,7 +13,8 @@ import com.keyboards.main.RunGame;
 public class Main {
     
 	public static void main(String[] args) throws InterruptedException {
-		Global.DEBUG = true;
+		Global.DEBUG = false;
+		Global.PLAYER_INVINCIBLE = false;
 
 		// create the game engine's objects
 		RunGame game = new RunGame("helpFile.txt");

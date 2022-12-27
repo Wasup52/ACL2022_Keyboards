@@ -67,7 +67,7 @@ public class UI {
 				drawEmptyHeart(g, x, y);
 			}
 			
-			if (x + spriteWidth*2 + WIDTH_SPACING < Global.WIDTH) {
+			if (x + spriteWidth*2 + WIDTH_SPACING < Global.SCREEN_WIDTH) {
 				x += spriteWidth + WIDTH_SPACING;
 			} else {
 				x = WIDTH_OFFSET;

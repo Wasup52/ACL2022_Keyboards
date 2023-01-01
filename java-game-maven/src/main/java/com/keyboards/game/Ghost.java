@@ -30,19 +30,19 @@ public class Ghost extends Mob {
     }
 
     protected void initHitBox() {
-        hitBoxCornersOffset = new Point(0, 0);
-        hitbox = new Rectangle(worldPosition.x + hitBoxCornersOffset.x, worldPosition.y + hitBoxCornersOffset.y, 32, 32);
+        hitBoxCornersOffset = new Point(8*SCALE_FACTOR,3*SCALE_FACTOR);
+        hitbox = new Rectangle(worldPosition.x + hitBoxCornersOffset.x, worldPosition.y + hitBoxCornersOffset.y, 22*SCALE_FACTOR, 26*SCALE_FACTOR);
 
-        attackLeftHitBoxCornersOffset = new Point(0, 0);
-        attackLeftHitbox = new Rectangle(worldPosition.x + attackLeftHitBoxCornersOffset.x, worldPosition.y + attackLeftHitBoxCornersOffset.y, 32, 32);
+        attackLeftHitBoxCornersOffset = new Point(1*SCALE_FACTOR, 6*SCALE_FACTOR);
+        attackLeftHitbox = new Rectangle(worldPosition.x + attackLeftHitBoxCornersOffset.x, worldPosition.y + attackLeftHitBoxCornersOffset.y, 12*SCALE_FACTOR, 15*SCALE_FACTOR);
         
-        attackRightHitBoxCornersOffset = new Point(0, 0);
-        attackRightHitbox = new Rectangle(worldPosition.x + attackRightHitBoxCornersOffset.x, worldPosition.y + attackRightHitBoxCornersOffset.y, 32, 32);
+        attackRightHitBoxCornersOffset = new Point(20*SCALE_FACTOR, 8*SCALE_FACTOR);
+        attackRightHitbox = new Rectangle(worldPosition.x + attackRightHitBoxCornersOffset.x, worldPosition.y + attackRightHitBoxCornersOffset.y, 12*SCALE_FACTOR, 15*SCALE_FACTOR);
     }
 
     protected void initSolidBox() {
-        solidBoxCornersOffset = new Point(0, 0);
-        solidBox = new Rectangle(worldPosition.x + solidBoxCornersOffset.x, worldPosition.y + solidBoxCornersOffset.y, 32, 32);
+        solidBoxCornersOffset = new Point(8*SCALE_FACTOR,3*SCALE_FACTOR);
+        solidBox = new Rectangle(worldPosition.x + solidBoxCornersOffset.x, worldPosition.y + solidBoxCornersOffset.y, 22*SCALE_FACTOR, 26*SCALE_FACTOR);
     }
 
     protected void initSprites() {

@@ -29,34 +29,31 @@ public class RunGame implements Game {
 	
 	ArrayList<Entity> entities = new ArrayList<Entity>();
 	ArrayList<Mob> mobs = new ArrayList<Mob>();
+	ArrayList<Chest> chests = new ArrayList<Chest>();
+	ArrayList<Item> items = new ArrayList<Item>();
 
-	//TileManager tileManager = new TileManager("res/mapsFile/test1.txt");
-	TileManager tileManager = new TileManager("res/mapsFile/mapSnow.txt", "res/tiles/sprite_snow_3.png");
+	TileManager tileManager;
 	UI ui = new UI();
 	
 	int keyCooldown = Global.KEY_COOLDOWN;
 
 	boolean isPaused = false;
+	boolean isWon = false;
 	boolean isFinished = false;
+	boolean isGameOver = false;
 	boolean inventoryOpen = false;
-	
-	Player player = new Player(tileManager.mapTiles);
-	Ghost ghost = new Ghost(tileManager.mapTiles);
-	Zombie zombie = new Zombie(tileManager.mapTiles);
-	Treasure treasure = new Treasure(tileManager.mapTiles, 15, player);
-	Chest chest = new Chest(tileManager.mapTiles, 15, player);
-	Life_potion life_potion = new Life_potion(tileManager.mapTiles, 15, player, false);
-	Attack_potion attack_potion = new Attack_potion(tileManager.mapTiles, 15, player, false);
-	Shield_potion shield_potion = new Shield_potion(tileManager.mapTiles, 15, player, false);
-	Speed_potion speed_potion = new Speed_potion(tileManager.mapTiles, 15, player, false);
 
-	Sound ambientSound = new Sound("res/sound/AMBForest.wav");
+	int nbOfMaps = 2;
+	int currentMap = 0;
+
+	Player player;
+	Treasure treasure;
 	
 	/**
 	 * constructor with source file for help
 	 */
 	public RunGame(String source) {
-		ambientSound.loop();
+		// ambientSound.loop();
 		
 		BufferedReader helpReader;
 		try {
@@ -70,23 +67,82 @@ public class RunGame implements Game {
 			System.out.println("Help not available");
 		}
 
-		mobs.add(zombie);
-		mobs.add(ghost);
-		
-		for (Entity mob : mobs) {
-			entities.add(mob);
-		}
-		
-		chest.put(life_potion);
-
-		entities.add(player);
-		entities.add(treasure);
-		entities.add(chest);
-		entities.add(attack_potion);
-		entities.add(speed_potion);
-		entities.add(shield_potion);
+		init(0, 10, 10, 10, 50, 50, 50, 50, 10, 10, 10, 10);
 	}
 	
+	public void init(int mapIndex, int nbOfZombies, int nbOfGhost, int nbOfChest, int chanceOfHavingLifePotionInChest, int chanceOfHavingAttackPotionInChest, int chanceOfHavingShieldPotionInChest, int chanceOfHavingSpeedPotionInChest, int nbOfLifePotion, int nbOfAttackPotion, int nbOfShieldPotion, int nbOfSpeedPotion) {
+		tileManager = new TileManager("res/mapsFile/maps.json", mapIndex);
+
+		player = new Player(tileManager.mapTiles);
+		entities.add(player);
+
+		treasure = new Treasure(tileManager.mapTiles, 15, player);
+		entities.add(treasure);
+
+		for (int i = 0; i < nbOfZombies; i++) {
+			Zombie zombie = new Zombie(tileManager.mapTiles);
+			mobs.add(zombie);
+			entities.add(zombie);
+		}
+		for (int i = 0; i < nbOfGhost; i++) {
+			Ghost ghost = new Ghost(tileManager.mapTiles);
+			mobs.add(ghost);
+			entities.add(ghost);
+		}
+		for (int i = 0; i < nbOfChest; i++) {
+			Chest chest = new Chest(tileManager.mapTiles, 15, player);
+			if (Math.random() * 100 < chanceOfHavingLifePotionInChest) {
+				Life_potion life_potion = new Life_potion(tileManager.mapTiles, 15, player, false);
+				chest.put(life_potion);
+			}
+			if (Math.random() * 100 < chanceOfHavingAttackPotionInChest) {
+				Attack_potion attack_potion = new Attack_potion(tileManager.mapTiles, 15, player, false);
+				chest.put(attack_potion);
+			}
+			if (Math.random() * 100 < chanceOfHavingShieldPotionInChest) {
+				Shield_potion shield_potion = new Shield_potion(tileManager.mapTiles, 15, player, false);
+				chest.put(shield_potion);
+			}
+			if (Math.random() * 100 < chanceOfHavingSpeedPotionInChest) {
+				Speed_potion speed_potion = new Speed_potion(tileManager.mapTiles, 15, player, false);
+				chest.put(speed_potion);
+			}
+			chests.add(chest);
+			entities.add(chest);
+		}
+		for (int i = 0; i < nbOfLifePotion; i++) {
+			Life_potion life_potion = new Life_potion(tileManager.mapTiles, 15, player, false);
+			items.add(life_potion);
+			entities.add(life_potion);
+		}
+		for (int i = 0; i < nbOfAttackPotion; i++) {
+			Attack_potion attack_potion = new Attack_potion(tileManager.mapTiles, 15, player, false);
+			items.add(attack_potion);
+			entities.add(attack_potion);
+		}
+		for (int i = 0; i < nbOfShieldPotion; i++) {
+			Shield_potion shield_potion = new Shield_potion(tileManager.mapTiles, 15, player, false);
+			items.add(shield_potion);
+			entities.add(shield_potion);
+		}
+		for (int i = 0; i < nbOfSpeedPotion; i++) {
+			Speed_potion speed_potion = new Speed_potion(tileManager.mapTiles, 15, player, false);
+			items.add(speed_potion);
+			entities.add(speed_potion);
+		}
+
+		tileManager.loopAmbientSound();
+	}
+
+	public void clear() {
+		entities.clear();
+		mobs.clear();
+		chests.clear();
+		items.clear();
+
+		tileManager.stopAmbientSound();
+	}
+
 	/**
 	 * constructor with source file for help
 	 */
@@ -158,20 +214,22 @@ public class RunGame implements Game {
 
 			if (commands.get("INTERACT")) {
 				if (keyCooldown <= 0) {
-					for (Entity entity : entities) {
-						if (player.collidesWith(entity)) {
-							if (entity instanceof Item) {
-								player.pickUp((Item) entity);
-							}
-							if (entity instanceof Chest) {
-								((Chest) entity).open();
-								chest.playOpenChestSound();
-								inventoryOpen = true;
-							}
-							if (entity instanceof Treasure) {
-								treasure.playTreasureSound();
-								isFinished = true;
-							}
+					for (Item item : items) {
+						if (player.collidesWith(item)) {
+							player.pickUp(item);
+						}
+					}
+					for (Chest chest : chests) {
+						if (player.collidesWith(chest)) {
+							chest.open();
+							chest.playOpenChestSound();
+							inventoryOpen = true;
+						}
+					}
+					if (treasure != null) {
+						if (player.collidesWith(treasure)) {
+							treasure.playTreasureSound();
+							isWon = true;
 						}
 					}
 					keyCooldown = Global.KEY_COOLDOWN;
@@ -187,9 +245,12 @@ public class RunGame implements Game {
 					if (player.isInventoryOpen()) {
 						player.closeInventory();
 					}
-					if (chest.isOpen()) {
-						chest.playCloseChestSound();
-						chest.close();
+					// if one of the chest in the chests array is open, close it
+					for (Chest chest : chests) {
+						if (chest.isOpen()) {
+							chest.playCloseChestSound();
+							chest.close();
+						}
 					}
 				} else {
 					player.openInventory();
@@ -205,8 +266,10 @@ public class RunGame implements Game {
 				if (player.isInventoryOpen()) {
 					player.getInventory().useClickedItem(mouse.getX(), mouse.getY());
 				}
-				if (chest.isOpen()) {
-					chest.transfertClickedItem(mouse.getX(), mouse.getY(), player);
+				for (Chest chest : chests) {
+					if (chest.isOpen()) {
+						chest.transfertClickedItem(mouse.getX(), mouse.getY(), player);
+					}
 				}
 			}
 		}
@@ -226,17 +289,33 @@ public class RunGame implements Game {
 		}
 	}
 
+	public boolean isGameOver() { return isGameOver; }
+	public boolean isGameFinished() { return isFinished; }
+
 	/**
 	 * check if the game is over
 	 */
 	@Override
 	public boolean isFinished() {
-		if (isFinished) {
-			System.out.println("Game finished");
+		if (isWon) {
+			System.out.println("Level " + currentMap + " won");
+			
+			currentMap++;
+			System.out.println("Loading level " + currentMap);
+			if (currentMap < 2) {
+				clear();
+				init(currentMap, 10, 10, 10, 50, 50, 50, 50, 10, 10, 10, 10);
+				isWon = false;
+			} else {
+				System.out.println("You won the game");
+				isFinished = true;
+			}
 		}
 		if (player.isDead()) {
 			System.out.println("Game over");
+			isGameOver = true;
 		}
-		return isFinished || player.isDead();
+
+		return isFinished || isGameOver;
 	}
 }

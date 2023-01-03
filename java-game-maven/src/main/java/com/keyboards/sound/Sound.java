@@ -7,6 +7,7 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
 public class Sound {
+	AudioInputStream inputStream;
 	Clip clip;
 	
 	public Sound(String filePath) {
@@ -15,19 +16,27 @@ public class Sound {
 	
 	private void setFile(String filePath) {
 			try {
-				AudioInputStream inputStream = AudioSystem.getAudioInputStream(new File(filePath));
+				inputStream = AudioSystem.getAudioInputStream(new File(filePath));
 				clip = AudioSystem.getClip();
-				clip.open(inputStream);
+				// clip.open(inputStream);
 			} catch(Exception e) {
-				System.out.println("Sound file not found " + filePath);
+				System.out.println("ERROR: Sound file not found " + filePath);
 				e.printStackTrace();
 			}
 	}
 	
 	public void play() {
-		clip.start();
-		if (!clip.isActive()) {
-			clip.setFramePosition(0);
+		try {
+			if (!clip.isOpen()) {
+				clip.open(inputStream);
+			}
+			clip.start();
+			if (!clip.isActive()) {
+				clip.setFramePosition(0);
+			}
+		} catch (Exception e) {
+			System.out.println("ERROR: unable to open clip");
+			e.printStackTrace();
 		}
 	}
 	
@@ -37,7 +46,15 @@ public class Sound {
 	}
 	
 	public void loop() {
-		clip.loop(Clip.LOOP_CONTINUOUSLY);
+		try {
+			if (!clip.isOpen()) {
+				clip.open(inputStream);
+			}
+			clip.loop(Clip.LOOP_CONTINUOUSLY);
+		} catch (Exception e) {
+			System.out.println("ERROR: unable to open clip");
+			e.printStackTrace();
+		}
 	}
 }
 

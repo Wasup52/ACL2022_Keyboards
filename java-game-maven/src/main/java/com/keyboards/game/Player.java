@@ -9,7 +9,6 @@ import java.awt.AlphaComposite;
 
 import com.keyboards.global.Global;
 import com.keyboards.graphics.Animation;
-import com.keyboards.graphics.Sprite;
 import com.keyboards.graphics.SpriteSheet;
 import com.keyboards.sound.Sound;
 import com.keyboards.tile.Tile;
@@ -21,7 +20,7 @@ public class Player extends Character {
     public final int maxHealth = 12;
 
     public Player(int col, int row, Tile[][] mapTiles) {
-        super(col, row, mapTiles);
+        super(col, row, mapTiles, Global.PLAYER_HAS_COLLISION);
 
         screenPosition.x = Global.SCREEN_WIDTH / 2 - Global.TILE_SIZE*SCALE_FACTOR / 2;
         screenPosition.y = Global.SCREEN_HEIGHT / 2 - Global.TILE_SIZE*SCALE_FACTOR / 2;
@@ -40,7 +39,7 @@ public class Player extends Character {
     }
 
     public Player(Tile[][] mapTiles) {
-        super(mapTiles);
+        super(mapTiles, Global.PLAYER_HAS_COLLISION);
 
         screenPosition.x = Global.SCREEN_WIDTH / 2 - Global.TILE_SIZE*SCALE_FACTOR / 2;
         screenPosition.y = Global.SCREEN_HEIGHT / 2 - Global.TILE_SIZE*SCALE_FACTOR / 2;
@@ -62,7 +61,11 @@ public class Player extends Character {
         hasInventory = true;
         health = maxHealth;
         attackDamage = 3;
-        speed = 1;
+        if (Global.BOOST_PLAYER_SPEED) {
+            speed = 10;
+        } else {
+            speed = 1;
+        }
         sprintSpeed = 2;
         attackCooldownMax = 25;
 
@@ -113,7 +116,7 @@ public class Player extends Character {
     }
 
     public void pickUp(Item item) {
-        if (!item.isInInventory) {
+        if (!inventory.isFull()) {
             inventory.addItem(item);
         } else {
             System.out.println("inventory is full, cannot pick up item " + item.getClass().getName());

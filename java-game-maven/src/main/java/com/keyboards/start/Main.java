@@ -15,6 +15,8 @@ public class Main {
 	public static void main(String[] args) throws InterruptedException {
 		Global.DEBUG = false;
 		Global.PLAYER_INVINCIBLE = false;
+		Global.PLAYER_HAS_COLLISION = true;
+		Global.BOOST_PLAYER_SPEED = true;
 
 		// create the game engine's objects
 		RunGame game = new RunGame("helpFile.txt");

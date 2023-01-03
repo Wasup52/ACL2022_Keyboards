@@ -20,4 +20,6 @@ public class Global {
 
 	public static boolean DEBUG = false;
 	public static boolean PLAYER_INVINCIBLE = false;
+	public static boolean PLAYER_HAS_COLLISION = true;
+	public static boolean BOOST_PLAYER_SPEED = false;
 }

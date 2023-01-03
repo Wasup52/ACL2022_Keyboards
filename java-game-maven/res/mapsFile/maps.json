@@ -1,0 +1,779 @@
+[
+    {
+        "name" : "level_1",
+        "mapFile" : "res/mapsFile/mapGrass.txt",
+        "ambientSound" : "res/sound/AMBForest.wav",
+        "stepSound" : "res/sound/stepGrass.wav",
+        "spriteSheet" : "res/tiles/grass_sprite_sheet.png",
+        "backgroundColorHex" : "#3b8fca",
+        "tiles" : [
+            {
+                "id" : 0,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 1,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 2,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 3,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 4,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 5,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 3,
+                    "yOffset" : 0,
+                    "width" : 13,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 6,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 7,
+                "isSolid": false,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 0,
+                    "height" : 0
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 8,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 9,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 4,
+                    "yOffset" : 2,
+                    "width" : 11,
+                    "height" : 12
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 10,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 11,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 3,
+                    "yOffset" : 0,
+                    "width" : 13,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 12,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 4,
+                    "yOffset" : 4,
+                    "width" : 11,
+                    "height" : 13
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 13,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 14,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 15,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 16,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 17,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 18,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 19,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 20,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 21,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 22,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 23,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 24,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 25,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 26,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 27,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 28,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 29,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            }
+        ]
+    },
+	{
+        "name" : "level_2",
+        "mapFile" : "res/mapsFile/mapSnow.txt",
+        "ambientSound" : "res/sound/Maladif.wav",
+        "stepSound" : "res/sound/stepSnow.wav",
+        "spriteSheet" : "res/tiles/snow_sprite_sheet.png",
+        "backgroundColorHex" : "#06b6ff",
+        "tiles" : [
+            {
+                "id" : 0,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 1,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 2,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 3,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 4,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 5,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 3,
+                    "yOffset" : 0,
+                    "width" : 13,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 6,
+                "isSolid": false,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 0,
+                    "height" : 0
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 7,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 8,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 9,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 3,
+                    "yOffset" : 0,
+                    "width" : 11,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 10,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 11,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 12,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 3,
+                    "yOffset" : 4,
+                    "width" : 11,
+                    "height" : 12
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 13,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 2,
+                    "yOffset" : 0,
+                    "width" : 10,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 14,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },{
+                "id" : 15,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },{
+                "id" : 16,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 17,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 13,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 18,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 2,
+                    "yOffset" : 0,
+                    "width" : 9,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 19,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 20,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 21,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 22,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 7,
+                    "yOffset" : 0,
+                    "width" : 10,
+                    "height" : 16
+                },
+                "layer" : "FOREGROUND"
+            },
+            {
+                "id" : 23,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 10,
+                    "height" : 16
+                },
+                "layer" : "FOREGROUND"
+            },
+            {
+                "id" : 24,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 10,
+                    "yOffset" : 0,
+                    "width" : 7,
+                    "height" : 16
+                },
+                "layer" : "FOREGROUND"
+            },
+            {
+                "id" : 25,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 7,
+                    "height" : 16
+                },
+                "layer" : "FOREGROUND"
+            },
+            {
+                "id" : 26,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 27,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 28,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 29,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 30,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 31,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 32,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 33,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 34,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 35,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 36,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 37,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            },
+            {
+                "id" : 38,
+                "isSolid": true,
+                "solidBox" : {
+                    "xOffset" : 0,
+                    "yOffset" : 0,
+                    "width" : 16,
+                    "height" : 16
+                },
+                "layer" : "BACKGROUND"
+            }
+        ]
+    }
+]

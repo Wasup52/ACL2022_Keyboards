@@ -70,10 +70,10 @@ public class Tile {
 			// draw the solid box
 			g.setColor(Color.MAGENTA);
 			if (this.solidBox != null) {
-				int screenSolidBoxX = this.solidBox.x + screenX;
-				int screenSolidBoxY = this.solidBox.y + screenY;
+				int screenSolidBoxX = this.solidBox.x - playerWorldPos.x + playerScreenPos.x;
+				int screenSolidBoxY = this.solidBox.y - playerWorldPos.y + playerScreenPos.y;
 
-				g.drawRect(screenX, screenY, this.solidBox.width, this.solidBox.height);
+				g.drawRect(screenSolidBoxX, screenSolidBoxY, this.solidBox.width, this.solidBox.height);
 			}
 		}
 	}

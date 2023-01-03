@@ -7,129 +7,48 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.Buffer;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import com.keyboards.global.Global;
 import com.keyboards.graphics.Sprite;
 import com.keyboards.graphics.SpriteSheet;
+import com.keyboards.sound.Sound;
 
 public class TileManager {
 	
 	public ArrayList<BufferedImage> tilesImages;
-	public Tile[][] mapTiles;
-	SpriteSheet tileSpriteSheet;
+	public Tile[][] mapTiles = new Tile[Global.WORLD_ROW_NUM][Global.WORLD_COL_NUM];
 
-	public TileManager(String mapFilePath) {
-		tilesImages = new ArrayList<BufferedImage>();
-		mapTiles = new Tile[Global.WORLD_ROW_NUM][Global.WORLD_COL_NUM];
-		
-		loadTileArrayFromDir("res/tiles-grass");
-		System.out.println("TileManager: " + tilesImages.size() + " tiles loaded");
+	Color backgroundColor;
 
-		initMapFromFile(mapFilePath);
+	Sound ambientSound;
 
-		System.out.println("Nb of rows: " + mapTiles.length);
-		System.out.println("Nb of cols: " + mapTiles[0].length);
-
-		// print map tiles
-//		for (int i = 0; i < mapTiles.length; i++) {
-//			for (int j = 0; j < mapTiles[0].length; j++) {
-//				System.out.print(mapTiles[i][j] + " "); 
-//			}
-//			System.out.println();
-//		}
-	}
-	
-	public TileManager(String mapFilePath, String sprintSheetPath) {
-		tileSpriteSheet = new SpriteSheet(sprintSheetPath, 16, 16);
-		tilesImages = new ArrayList<BufferedImage>();
-		for(Sprite sprite : tileSpriteSheet.getSpriteArray()) {
-			tilesImages.add(sprite.image);
-		}
-		mapTiles = new Tile[Global.WORLD_ROW_NUM][Global.WORLD_COL_NUM];
-		
-		
-		System.out.println("TileManager: " + tilesImages.size() + " tiles loaded");
-
-		initMapFromFile(mapFilePath);
-
-		System.out.println("Nb of rows: " + mapTiles.length);
-		System.out.println("Nb of cols: " + mapTiles[0].length);
-
-		// print map tiles
-//		for (int i = 0; i < mapTiles.length; i++) {
-//			for (int j = 0; j < mapTiles[0].length; j++) {
-//				System.out.print(mapTiles[i][j] + " "); 
-//			}
-//			System.out.println();
-//		}
-	}
-	
-	private BufferedImage loadTileImage(File file) {
-		BufferedImage tileImage = null;
-        try {
-			System.out.println("Loading: " + file + "...");
-            tileImage = ImageIO.read(file);
-        } catch (Exception e) {
-            System.out.println("ERROR: could not load file: " + file);
-            System.err.println(e);
-        }
-        return tileImage;
-	}
-
-
-	private void loadTileArrayFromDir(String dirPath) {
-		File dir = new File(dirPath);
-		if (dir.isDirectory()) {
-			File[] files = dir.listFiles();
-			// sort the files alphabetically to ensure that the tiles are loaded in a predictable order
-			for (int i = 0; i < files.length; i++) {
-				for (int j = i + 1; j < files.length; j++) {
-					if (files[i].getName().compareTo(files[j].getName()) > 0) {
-						File temp = files[i];
-						files[i] = files[j];
-						files[j] = temp;
-					}
-				}
-			}
-			for (int i = 0; i < files.length; i++) {
-				tilesImages.add(loadTileImage(files[i]));
-			}
-			System.out.println(tilesImages.size() + " tiles loaded");
-		} else {
-			System.out.println("ERROR: not a directory: " + dirPath);
+	public TileManager(String mapsJsonFilePAth, int mapIndex) {
+		try {
+			initMapFromJsonFile(mapsJsonFilePAth, mapIndex);
+		} catch (Exception e) {
+			System.out.println("ERROR: could not load map from json file");
+			e.printStackTrace();
 		}
 	}
 	
-	// needs to be in map class
 	public Tile getTile(int row, int col) {
 		return mapTiles[row][col];
 	}
-
-	private void initMap() {
-	    System.out.println("Initializing map...");
-		for (int row = 0; row < Global.WORLD_ROW_NUM; row++) {
-			for (int col = 0; col < Global.WORLD_COL_NUM; col++) {
-				mapTiles[row][col] = new Tile(row, col, null);
-			}
+	
+	void loadTilesImages(SpriteSheet spriteSheet) {
+		tilesImages = new ArrayList<BufferedImage>();
+		for(Sprite sprite : spriteSheet.getSpriteArray()) {
+			tilesImages.add(sprite.image);
 		}
-
-		for (int i = 0; i < tilesImages.size(); i++) {
-			BufferedImage tileImage = tilesImages.get(i);
-			if (tileImage != null) {
-				if (i == 3) {
-					mapTiles[5][i+1] = new Tile(5, i + 1, tileImage, new Rectangle((i+1) * Global.TILE_SIZE, 5 * Global.TILE_SIZE, Global.TILE_SIZE, Global.TILE_SIZE));
-				} else {
-					mapTiles[5][i] = new Tile(5, i, tileImage, new Rectangle(i * Global.TILE_SIZE, 5 * Global.TILE_SIZE, Global.TILE_SIZE, Global.TILE_SIZE));
-				}
-			}
-		}
+		
+		System.out.println("Loaded " + tilesImages.size() + " images from spriteSheet");
 	}
 
 	private int getNbOfLine(String filePath) throws IOException {
@@ -143,72 +62,107 @@ public class TileManager {
 		return nbLine;
 	}
 
-	private void initMapFromFile(String filePath) {
+	private void initMapFromJsonFile(String filePath, int mapIndex) throws Exception {
 	    System.out.println("Initializing map...");
 
-		try {
-			File file = new File(filePath);
-			BufferedReader br = new BufferedReader(new FileReader(file));
+		File file = new File(filePath);
+		FileReader fr = new FileReader(file);
 
-			if (getNbOfLine(filePath) != Global.WORLD_ROW_NUM) {
-				br.close();
-				throw new Exception("ERROR: invalid map file (wrong number of rows)");
-			}
+		JSONParser parser = new JSONParser();
+		Object mapsJSON = parser.parse(fr);
+		JSONArray maps = (JSONArray) mapsJSON;
 
-			String line;
-			int row = 0;
-			while ((line = br.readLine()) != null) {
-				System.out.println(line);
+		if (mapIndex >= maps.size() || mapIndex < 0) {
+			throw new Exception("ERROR: invalid map index");
+		}
 
-				// split line on space
-				String[] lineSplit = line.split(" ");
+		JSONObject map = (JSONObject) maps.get(mapIndex);
 
-				if (lineSplit.length != Global.WORLD_COL_NUM) {
-					br.close();
-					throw new Exception("ERROR: invalid map file (wrong number of columns on line " + row + ")");
-				}
-	
-				for (int col = 0; col < lineSplit.length; col++) {
-					int tileIndex = Integer.parseInt(lineSplit[col])-1;
+		ambientSound = new Sound((String) map.get("ambientSound"));
+		
+		loadTilesImages(new SpriteSheet((String) map.get("spriteSheet"), 16, 16));
+		backgroundColor = Sprite.HexToColor((String) map.get("backgroundColorHex"));
+		
+		String mapFile = (String) map.get("mapFile");
+		JSONArray tilesJSON = (JSONArray) map.get("tiles");
 
-					if (tileIndex >= tilesImages.size()) {
-						br.close();
-						System.out.println("Index : " + tileIndex + ", size : " + tilesImages.size());
-						throw new Exception("ERROR: invalid map file (invalid tile index on line " + row + ")");
-					}
+		BufferedReader br = new BufferedReader(new FileReader(new File(mapFile)));
 
-					if (tileIndex == -1) {
-						mapTiles[row][col] = new Tile(row, col, null);
-					} else {
-						BufferedImage tileImage;
-						tileImage = tilesImages.get(tileIndex);
-						if (tileIndex != 5) {
-							mapTiles[row][col] = new Tile(row, col, tileImage, new Rectangle(col * Global.TILE_SIZE, row * Global.TILE_SIZE, Global.TILE_SIZE, Global.TILE_SIZE));
-						} else {
-							mapTiles[row][col] = new Tile(row, col, tileImage);
-						}
-					}
-				}
-
-				row++;
-			}
+		if (getNbOfLine(mapFile) != Global.WORLD_ROW_NUM) {
 			br.close();
+			throw new Exception("ERROR: invalid map file (wrong number of rows)");
+		}
 
-			System.out.println("Map initialized");
-		} catch (Exception e) {
-			System.out.println("ERROR: could not load file: " + filePath);
-			System.err.println(e);
+		String line;
+		int row = 0;
+		while ((line = br.readLine()) != null) {
+			String[] tilesIndex = line.split(" ");
+
+			if (tilesIndex.length != Global.WORLD_COL_NUM) {
+				br.close();
+				throw new Exception("ERROR: invalid map file (wrong number of columns) on line " + row);
+			}
+
+			for (int col = 0; col < tilesIndex.length; col++) {
+				int tileIndex = Integer.parseInt(tilesIndex[col]);
+
+				if (tileIndex >= 0 && tileIndex < tilesImages.size() && tileIndex < tilesJSON.size()) {
+					// get the solidBox from the tilesJSON
+					int xOffset = tilesJSON.get(tileIndex) != null ? ((Long) ((JSONObject) ((JSONObject) tilesJSON.get(tileIndex)).get("solidBox")).get("xOffset")).intValue()  * Global.SCALE : 0; // if the tile is not in the tilesJSON, the xOffset is 0
+					int yOffset = tilesJSON.get(tileIndex) != null ? ((Long) ((JSONObject) ((JSONObject) tilesJSON.get(tileIndex)).get("solidBox")).get("yOffset")).intValue()  * Global.SCALE : 0; // if the tile is not in the tilesJSON, the yOffset is 0
+					int width = tilesJSON.get(tileIndex) != null ? ((Long) ((JSONObject) ((JSONObject) tilesJSON.get(tileIndex)).get("solidBox")).get("width")).intValue() * Global.SCALE : Global.TILE_SIZE; // if the tile is not in the tilesJSON, the width is the default tile size
+					int height = tilesJSON.get(tileIndex) != null ? ((Long) ((JSONObject) ((JSONObject) tilesJSON.get(tileIndex)).get("solidBox")).get("height")).intValue() * Global.SCALE : Global.TILE_SIZE; // if the tile is not in the tilesJSON, the height is the default tile size
+					Boolean isSolid = tilesJSON.get(tileIndex) != null ? (Boolean) ((JSONObject) tilesJSON.get(tileIndex)).get("isSolid") : false; // if the tile is not in the tilesJSON, it is not solid
+
+					Rectangle tileSolidBox = new Rectangle(col * Global.TILE_SIZE + xOffset, row * Global.TILE_SIZE + yOffset, width, height);
+
+					Tile tile;
+					if (isSolid) {
+						tile = new Tile(row, col, tilesImages.get(tileIndex), tileSolidBox);
+					} else {
+						tile = new Tile(row, col, tilesImages.get(tileIndex));
+					}
+
+					mapTiles[row][col] = tile;
+				} else {
+					mapTiles[row][col] = new Tile(row, col, null);
+				}
+			}
+
+			row++;
+		}
+
+		System.out.println("Map initialized");
+		fr.close();
+		br.close();
+
+	}
+
+	public void loopAmbientSound() {
+		if (ambientSound != null) {
+			ambientSound.loop();
+		}
+	}
+
+	public void stopAmbientSound() {
+		if (ambientSound != null) {
+			ambientSound.stop();
 		}
 	}
 
 	public void draw(Graphics2D g, Point playerWorldPos, Point playerScreenPos) {
+		// draw a sqare the size of the screen whith the background color to prevent seeing white when on the edge of the map
+		g.setColor(backgroundColor);
+		g.fillRect(0, 0, Global.SCREEN_WIDTH, Global.SCREEN_HEIGHT);
 
 		for (int worldRow = 0; worldRow < Global.WORLD_ROW_NUM; worldRow++) {
 			for (int worldCol = 0; worldCol < Global.WORLD_COL_NUM; worldCol++) {
-				if (mapTiles[worldRow][worldCol] != null && mapTiles[worldRow][worldCol].needToBeDrawn(worldCol, worldRow, playerWorldPos, playerScreenPos)) {
-					mapTiles[worldRow][worldCol].draw(g, worldCol, worldRow, playerWorldPos, playerScreenPos);
-				} else {
-					Tile.drawBlankTile(g, worldCol, worldRow, playerWorldPos, playerScreenPos);
+				if (mapTiles[worldRow][worldCol].needToBeDrawn(worldCol, worldRow, playerWorldPos, playerScreenPos)) {
+					if (mapTiles[worldRow][worldCol] != null) {
+						mapTiles[worldRow][worldCol].draw(g, worldCol, worldRow, playerWorldPos, playerScreenPos);
+					} else {
+						Tile.drawBlankTile(g, worldCol, worldRow, playerWorldPos, playerScreenPos);
+					}
 				}
 			}
 		}

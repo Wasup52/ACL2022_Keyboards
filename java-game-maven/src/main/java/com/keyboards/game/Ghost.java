@@ -6,6 +6,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
+import com.keyboards.global.Global;
 import com.keyboards.graphics.Animation;
 import com.keyboards.graphics.Sprite;
 import com.keyboards.graphics.SpriteSheet;
@@ -27,6 +28,7 @@ public class Ghost extends Mob {
         attackDamage = 2;
         speed = 1;
         attackCooldownMax = 20;
+        agroRange = Global.TILE_SIZE * 6;
     }
 
     protected void initHitBox() {

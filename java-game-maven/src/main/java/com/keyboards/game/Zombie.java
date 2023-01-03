@@ -6,6 +6,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
+import com.keyboards.global.Global;
 import com.keyboards.graphics.Animation;
 import com.keyboards.graphics.Sprite;
 import com.keyboards.graphics.SpriteSheet;
@@ -27,6 +28,7 @@ public class Zombie extends Mob {
         attackDamage = 3;
         speed = 1;
         attackCooldownMax = 60;
+        agroRange = Global.TILE_SIZE * 7;
 
         SCALE_FACTOR = 2;
     }

@@ -155,6 +155,18 @@ public abstract class Mob extends Character{
 
     }
 
+    public int getDistance(Entity target) {
+        return (int) Math.sqrt(Math.pow(getX() - target.getX(), 2) + Math.pow(getY() - target.getY(), 2));
+    }
+
+    public boolean isInAgroRange(Entity target) {
+        if (agroRange == 0) { 
+            return true;
+        } else {
+            return getDistance(target) <= agroRange; 
+        }
+    }
+
     public void moveTowards(Entity target) {
         // TODO move towards the target
         path = getPath(target);
@@ -245,7 +257,11 @@ public abstract class Mob extends Character{
 
     public void update(Player player) {
         if (!isDead()) {
-            moveTowards(player);
+            if (isInAgroRange(player)) {
+                moveTowards(player);
+            } else {
+                idle();
+            }
 
             if (canAttack(player)) {
                 if (!Global.PLAYER_INVINCIBLE) {
@@ -264,19 +280,20 @@ public abstract class Mob extends Character{
             for (Node<Point> node : graph.getNodes()) {
                 drawNode(g, node, playerWorldPos, playerScreenPos);
             }
+
+            drawPath(g, playerWorldPos, playerScreenPos);
+    
+            // draw the next point
+            if (nextPoint != null) {
+                int screenX = nextPoint.x - playerWorldPos.x + playerScreenPos.x;
+                int screenY = nextPoint.y - playerWorldPos.y + playerScreenPos.y;
+    
+                g.setColor(Color.RED);
+                int r = 5;
+                g.fillOval(screenX + Global.TILE_SIZE / 2 - r / 2, screenY + Global.TILE_SIZE / 2 - r / 2, r, r);
+            }
         }
 
-        drawPath(g, playerWorldPos, playerScreenPos);
-
-        // draw the next point
-        if (nextPoint != null) {
-            int screenX = nextPoint.x - playerWorldPos.x + playerScreenPos.x;
-            int screenY = nextPoint.y - playerWorldPos.y + playerScreenPos.y;
-
-            g.setColor(Color.RED);
-            int r = 5;
-            g.fillOval(screenX + Global.TILE_SIZE / 2 - r / 2, screenY + Global.TILE_SIZE / 2 - r / 2, r, r);
-        }
 
         super.draw(g, playerWorldPos, playerScreenPos);
     }

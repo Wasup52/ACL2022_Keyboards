@@ -342,7 +342,7 @@
 	{
         "name" : "level_2",
         "mapFile" : "res/mapsFile/mapSnow.txt",
-        "ambientSound" : "res/sound/Maladif.wav",
+        "ambientSound" : "res/sound/AMBForest.wav",
         "stepSound" : "res/sound/stepSnow.wav",
         "spriteSheet" : "res/tiles/snow_sprite_sheet.png",
         "backgroundColorHex" : "#06b6ff",

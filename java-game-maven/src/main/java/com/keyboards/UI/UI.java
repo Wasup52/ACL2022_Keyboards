@@ -16,6 +16,46 @@ import com.keyboards.tile.Tile;
 
 public class UI {
 
+	public BufferedImage getHeartFull() {
+		return heartFull;
+	}
+
+	public BufferedImage getHeartHalf() {
+		return heartHalf;
+	}
+
+	public BufferedImage getHeartEmpty() {
+		return heartEmpty;
+	}
+
+	public int getWIDTH_OFFSET() {
+		return WIDTH_OFFSET;
+	}
+
+	public int getHEIGHT_OFFSET() {
+		return HEIGHT_OFFSET;
+	}
+
+	public int getWIDTH_SPACING() {
+		return WIDTH_SPACING;
+	}
+
+	public int getHEIGHT_SPACING() {
+		return HEIGHT_SPACING;
+	}
+
+	public int getSCALE_FACTOR() {
+		return SCALE_FACTOR;
+	}
+
+	public int getSpriteHeight() {
+		return spriteHeight;
+	}
+
+	public int getSpriteWidth() {
+		return spriteWidth;
+	}
+
 	private BufferedImage heartFull;
 	private BufferedImage heartHalf;
 	private BufferedImage heartEmpty;

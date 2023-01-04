@@ -25,8 +25,11 @@ public class Shield_potion extends Item {
 	public void playDrinkingSound() {
 		drinkingSound.play();
 	}
-	public void use(Character character) {
-		character.health += this.skillIncrease;
+	public void use(Player p) {
+		p.bouclier += this.skillIncrease;
+		pl=p;
+		utilise=1;
+		
 		System.out.println("used " + this.getClass().getSimpleName());
 		playDrinkingSound();
 	}
@@ -47,6 +50,9 @@ public class Shield_potion extends Item {
 		image = sprite[0].image;
 		
 		drinkingSound = new Sound("res/sound/drinkingSound.wav");
+	}
+	public void draw(Graphics2D g) {
+		
 	}
 }
 

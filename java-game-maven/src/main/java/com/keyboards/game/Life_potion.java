@@ -25,8 +25,17 @@ public class Life_potion extends Item {
 		drinkingSound.play();
 	}
 
-	public void use(Character character) {
-		character.health += this.skillIncrease;
+	public void use(Player p) {
+		p.health += this.skillIncrease;
+		pl=p;
+		utilise=1;
+		if (pl.health + this.skillIncrease<=pl.maxHealth+pl.bouclier) {
+			pl.health += this.skillIncrease;
+		}
+		if(pl.health + this.skillIncrease>pl.maxHealth+pl.bouclier) {
+			pl.health=pl.maxHealth+pl.bouclier;
+			
+		}
 		System.out.println("used " + this.getClass().getSimpleName());
 		playDrinkingSound();
 	}
@@ -48,5 +57,8 @@ public class Life_potion extends Item {
 		image = sprite[0].image;
 		
 		drinkingSound = new Sound("res/sound/drinkingSound.wav");
+	}
+	public void draw(Graphics2D g) {
+		
 	}
 }

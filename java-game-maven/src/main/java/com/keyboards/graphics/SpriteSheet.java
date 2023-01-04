@@ -35,7 +35,35 @@ public class SpriteSheet {
         loadSpriteArray();
     }
 
-    /**
+    public Sprite getSPRITESHEET() {
+		return SPRITESHEET;
+	}
+
+	public int getW() {
+		return w;
+	}
+
+	public int getH() {
+		return h;
+	}
+
+	public int getwSprite() {
+		return wSprite;
+	}
+
+	public int gethSprite() {
+		return hSprite;
+	}
+
+	public String getFile() {
+		return file;
+	}
+
+	public void setSpriteArray(Sprite[] spriteArray) {
+		this.spriteArray = spriteArray;
+	}
+
+	/**
      * Loads the sprite sheet into the spriteArray where the sprites are h pixels high and w pixels wide
      * 
      * @param file
@@ -63,7 +91,7 @@ public class SpriteSheet {
     public Sprite getSpriteSheet() { return SPRITESHEET; } // returns the spritesheet
     public Sprite[] getSpriteArray() { return spriteArray; } // returns the sprite array
 
-    private BufferedImage loadSprite(String file) {
+    public BufferedImage loadSprite(String file) {
         BufferedImage sprite = null;
         try {
             sprite = ImageIO.read(new File(file));
@@ -73,7 +101,7 @@ public class SpriteSheet {
         return sprite;
     }
 
-    private void loadSpriteArray() {
+    public void loadSpriteArray() {
         spriteArray = new Sprite[wSprite * hSprite];
 
         for (int y = 0; y < hSprite; y++) {

@@ -32,12 +32,12 @@ public class TestAnimation {
 		
 		
 		Animation a = new Animation(idleLeftSheet.getSpriteArray(), 5);
-		assertNotNull(a.sprites);  
-	    System.out.println("type object.sprites : " + a.sprites.getClass().getSimpleName());  
-	    assertNotNull(a.spriteCounterMax);  
-	     
-	    assertNotNull(a.isReversed);  
-	      
+		assertNotNull(a.getSprites());  
+	    System.out.println("type object.sprites : " + a.getSprites().getClass().getSimpleName());  
+	    assertNotNull(a.getSpriteCounter());  
+	    System.out.println("type object.SpritesCounter : " + a.getSpriteCounter());
+	    assertNotNull(a.isReversed());  
+	    System.out.println("type object.isReversed() : " + a.isReversed()); 
 		
 	}
 

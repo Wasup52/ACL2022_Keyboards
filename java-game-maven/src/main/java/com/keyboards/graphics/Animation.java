@@ -2,7 +2,51 @@ package com.keyboards.graphics;
 
 public class Animation {
 
-    private Sprite[] sprites;
+    public Sprite[] getSprites() {
+		return sprites;
+	}
+
+	public void setSprites(Sprite[] sprites) {
+		this.sprites = sprites;
+	}
+
+	public int getSpriteCounter() {
+		return spriteCounter;
+	}
+
+	public void setSpriteCounter(int spriteCounter) {
+		this.spriteCounter = spriteCounter;
+	}
+
+	public int getSpriteCounterMax() {
+		return spriteCounterMax;
+	}
+
+	public void setSpriteCounterMax(int spriteCounterMax) {
+		this.spriteCounterMax = spriteCounterMax;
+	}
+
+	public boolean isReversed() {
+		return isReversed;
+	}
+
+	public void setReversed(boolean isReversed) {
+		this.isReversed = isReversed;
+	}
+
+	public boolean isHasReachedEndFrame() {
+		return hasReachedEndFrame;
+	}
+
+	public void setHasReachedEndFrame(boolean hasReachedEndFrame) {
+		this.hasReachedEndFrame = hasReachedEndFrame;
+	}
+
+	public void setSpriteNum(int spriteNum) {
+		this.spriteNum = spriteNum;
+	}
+
+	private Sprite[] sprites;
 
     private int spriteNum = 0;
     private int spriteCounter = 0;

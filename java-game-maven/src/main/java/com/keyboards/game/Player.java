@@ -18,7 +18,7 @@ public class Player extends Character {
     private Inventory inventory = new Inventory(this, 2, 6);
 
     public final int maxHealth = 12;
-
+    public int bouclier=0;
     public Player(int col, int row, Tile[][] mapTiles) {
         super(col, row, mapTiles, Global.PLAYER_HAS_COLLISION);
 

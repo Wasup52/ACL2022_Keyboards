@@ -102,7 +102,7 @@ public class Inventory {
     public void useClickedItem(int mouseX, int mouseY) {
         Item item = getClickedItem(mouseX, mouseY);
         if (item != null) {
-            item.use((Character) owner);
+            item.use((Player) owner);
             removeItem(item);
         }
     }

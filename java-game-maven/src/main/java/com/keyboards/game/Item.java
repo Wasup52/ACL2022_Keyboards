@@ -9,7 +9,9 @@ import com.keyboards.global.Global;
 import com.keyboards.tile.Tile;
 
 public abstract class Item extends Object{
-
+	Player pl;
+	int utilise=0;
+	int temps=100;
 	int skillIncrease = 0;
 	public boolean isInInventory;
 
@@ -32,7 +34,7 @@ public abstract class Item extends Object{
         }
     }
 	
-	public abstract void use(Character character);
+	public abstract void use(Player p);
 
     public void draw(Graphics2D g, int x, int y) {
 		if (image != null) {

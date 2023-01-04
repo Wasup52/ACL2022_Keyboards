@@ -36,8 +36,8 @@ public class TestSpriteSheet {
 	public void testloadSpriteArray() {
 		SpriteSheet s = new SpriteSheet("res/ghost/idle-left.png", 32, 32);
 		s.loadSpriteArray();
-		assertNotNull(s.spriteArray);
-		System.out.println("type s.spriteArray : " + s.spriteArray.getClass().getSimpleName());
+		assertNotNull(s.getSpriteArray());
+		System.out.println("type s.spriteArray : " + s.getSpriteArray().getClass().getSimpleName());
 		
 	}
 

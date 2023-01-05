@@ -37,9 +37,11 @@ public class RunGame implements Game {
 	
 	int keyCooldown = Global.KEY_COOLDOWN;
 
+	boolean isStarted = false;
 	boolean isPaused = false;
 	boolean isWon = false;
 	boolean isFinished = false;
+	boolean isDone = false;
 	boolean isGameOver = false;
 	boolean inventoryOpen = false;
 
@@ -151,140 +153,149 @@ public class RunGame implements Game {
 		
 		keyCooldown--;
 
-		if (!inventoryOpen) {
-			if (!isPaused) {
-				if (commands.get("ESCAPE")) {
-					if (keyCooldown <= 0) {
-						isPaused = true;
-						keyCooldown = Global.KEY_COOLDOWN;
-					}
-				}
-			} else {
-				if (commands.get("ESCAPE")) {
-					if (keyCooldown <= 0) {
-						isPaused = false;
-						keyCooldown = Global.KEY_COOLDOWN;
-					}
-				}
-			}
-		}
-		
-		// if an inventory is open the player can't do anything else
-		if (!inventoryOpen && !player.isDead() && !isPaused) {
-			if (commands.get("UP")) {
-				player.moveUp();
-				player.playFootStepGrassSound();
-			}
-			if (commands.get("DOWN")) { 
-				player.moveDown(); 
-				player.playFootStepGrassSound();
-			}
-			if (commands.get("LEFT")) { 
-				player.moveLeft();
-				player.playFootStepGrassSound();
-			}
-			if (commands.get("RIGHT")) { 
-				player.moveRight();
-				player.playFootStepGrassSound();
-			}
-			if (Controller.isIdle(commands)) { player.idle(); }
-
-			if (commands.get("SHIFT")) {
-				player.isSprinting = true;
-			} else {
-				player.isSprinting = false;
-			}
-
-			if (commands.get("ATTACK")) {
-				player.playAttackSound();
-				
-				player.isAttacking = true;
-				// System.out.println("Player is attacking");
-			}
-
-			if (player.isAttacking) {
-				// check if a mob is in the attack range
-				for (Mob mob : mobs) {
-					if (player.canAttack(mob)) {
-						System.out.println(mob + " attacked");
-						player.attack(mob);
-					}
-				}
-			}
-
-			if (commands.get("INTERACT")) {
-				if (keyCooldown <= 0) {
-					for (Item item : items) {
-						if (player.collidesWith(item)) {
-							player.pickUp(item);
-						}
-					}
-					for (Chest chest : chests) {
-						if (player.collidesWith(chest)) {
-							chest.open();
-							chest.playOpenChestSound();
-							inventoryOpen = true;
-						}
-					}
-					if (treasure != null) {
-						if (player.collidesWith(treasure)) {
-							treasure.playTreasureSound();
-							isWon = true;
-						}
-					}
-					keyCooldown = Global.KEY_COOLDOWN;
-				}
-			}
-		} else {
-			player.idle(); // idle if the inventory is open
-		}
-
-		if (commands.get("TAB") || (inventoryOpen && commands.get("ESCAPE"))) {
-			if (keyCooldown <= 0) {
-				if (inventoryOpen) {
-					if (player.isInventoryOpen()) {
-						player.closeInventory();
-					}
-					// if one of the chest in the chests array is open, close it
-					for (Chest chest : chests) {
-						if (chest.isOpen()) {
-							chest.playCloseChestSound();
-							chest.close();
+		if (isStarted) {
+			if (!inventoryOpen) {
+				if (!isPaused) {
+					if (commands.get("ESCAPE")) {
+						if (keyCooldown <= 0) {
+							isPaused = true;
+							keyCooldown = Global.KEY_COOLDOWN;
 						}
 					}
 				} else {
-					player.openInventory();
-				}
-				inventoryOpen = !inventoryOpen;
-				keyCooldown = Global.KEY_COOLDOWN;
-			}
-		}
-
-		if (mouse.getButton() != -1) {
-			// System.out.println("Mouse button " + mouse.getButton() + " pressed at " + mouse.getX() + ", " + mouse.getY());
-			if (inventoryOpen) {
-				if (player.isInventoryOpen()) {
-					player.getInventory().useClickedItem(mouse.getX(), mouse.getY());
-				}
-				for (Chest chest : chests) {
-					if (chest.isOpen()) {
-						chest.transfertClickedItem(mouse.getX(), mouse.getY(), player);
+					if (commands.get("ESCAPE")) {
+						if (keyCooldown <= 0) {
+							isPaused = false;
+							keyCooldown = Global.KEY_COOLDOWN;
+						}
 					}
 				}
 			}
-		}
-
-		for (int i=0; i < mobs.size(); i++) {
-			Mob mob = mobs.get(i);
-			if (!isPaused) {
-				mob.update(player);
-				if (mob.isFaded()) {
-					entities.remove(mob);
-					mobs.remove(mob);
-					i--;
+			
+			// if an inventory is open the player can't do anything else
+			if (!inventoryOpen && !player.isDead() && !isPaused) {
+				if (commands.get("UP")) {
+					player.moveUp();
+					tileManager.playStepSound();
+				}
+				if (commands.get("DOWN")) { 
+					player.moveDown(); 
+					tileManager.playStepSound();
+				}
+				if (commands.get("LEFT")) { 
+					player.moveLeft();
+					tileManager.playStepSound();
+				}
+				if (commands.get("RIGHT")) { 
+					player.moveRight();
+					tileManager.playStepSound();
+				}
+				if (Controller.isIdle(commands)) { player.idle(); }
+	
+				if (commands.get("SHIFT")) {
+					player.isSprinting = true;
+				} else {
+					player.isSprinting = false;
+				}
+	
+				if (commands.get("ATTACK")) {
+					player.playAttackSound();
+					
+					player.isAttacking = true;
+					// System.out.println("Player is attacking");
+				}
+	
+				if (player.isAttacking) {
+					// check if a mob is in the attack range
+					for (Mob mob : mobs) {
+						if (player.canAttack(mob)) {
+							System.out.println(mob + " attacked");
+							player.attack(mob);
+						}
+					}
+				}
+	
+				if (commands.get("INTERACT")) {
+					if (keyCooldown <= 0) {
+						for (Item item : items) {
+							if (player.collidesWith(item)) {
+								player.pickUp(item);
+							}
+						}
+						for (Chest chest : chests) {
+							if (player.collidesWith(chest)) {
+								chest.open();
+								chest.playOpenChestSound();
+								inventoryOpen = true;
+							}
+						}
+						if (treasure != null) {
+							if (player.collidesWith(treasure)) {
+								treasure.playTreasureSound();
+								isWon = true;
+							}
+						}
+						keyCooldown = Global.KEY_COOLDOWN;
+					}
 				}
 			} else {
-				mob.idle();
+				player.idle(); // idle if the inventory is open
+			}
+	
+			if (commands.get("TAB") || (inventoryOpen && commands.get("ESCAPE"))) {
+				if (keyCooldown <= 0) {
+					if (inventoryOpen) {
+						if (player.isInventoryOpen()) {
+							player.closeInventory();
+						}
+						// if one of the chest in the chests array is open, close it
+						for (Chest chest : chests) {
+							if (chest.isOpen()) {
+								chest.playCloseChestSound();
+								chest.close();
+							}
+						}
+					} else {
+						player.openInventory();
+					}
+					inventoryOpen = !inventoryOpen;
+					keyCooldown = Global.KEY_COOLDOWN;
+				}
+			}
+	
+			if (mouse.getButton() != -1) {
+				// System.out.println("Mouse button " + mouse.getButton() + " pressed at " + mouse.getX() + ", " + mouse.getY());
+				if (inventoryOpen) {
+					if (player.isInventoryOpen()) {
+						player.getInventory().useClickedItem(mouse.getX(), mouse.getY());
+					}
+					for (Chest chest : chests) {
+						if (chest.isOpen()) {
+							chest.transfertClickedItem(mouse.getX(), mouse.getY(), player);
+						}
+					}
+				}
+			}
+	
+			for (int i=0; i < mobs.size(); i++) {
+				Mob mob = mobs.get(i);
+				if (!isPaused) {
+					mob.update(player);
+					if (mob.isFaded()) {
+						entities.remove(mob);
+						mobs.remove(mob);
+						i--;
+					}
+				} else {
+					mob.idle();
+				}
+			}
+		} else {
+			if (commands.get("ENTER")) {
+				if (keyCooldown <= 0) {
+					isStarted = true;
+					keyCooldown = Global.KEY_COOLDOWN;
+				}
 			}
 		}
 	}
@@ -297,7 +308,7 @@ public class RunGame implements Game {
 	 */
 	@Override
 	public boolean isFinished() {
-		if (isWon) {
+		if (isWon && !isDone) {
 			System.out.println("Level " + currentMap + " won");
 			
 			currentMap++;
@@ -307,15 +318,20 @@ public class RunGame implements Game {
 				init(currentMap, 10, 10, 10, 50, 50, 50, 50, 10, 10, 10, 10);
 				isWon = false;
 			} else {
-				System.out.println("You won the game");
+				// System.out.println("You won the game");
 				isFinished = true;
 			}
 		}
+
 		if (player.isDead()) {
-			System.out.println("Game over");
+			// System.out.println("Game over");
 			isGameOver = true;
 		}
 
-		return isFinished || isGameOver;
+		if (isDone) {
+			tileManager.stopSounds();
+		}
+
+		return isDone;
 	}
 }

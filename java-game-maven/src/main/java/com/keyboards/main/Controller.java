@@ -26,6 +26,7 @@ public class Controller implements GameController{
 		commands.put("ESCAPE", false);
 		commands.put("TAB", false);
 		commands.put("INTERACT", false);
+		commands.put("ENTER", false);
 	}
 
 	/**
@@ -67,6 +68,7 @@ public class Controller implements GameController{
 			case KeyEvent.VK_ESCAPE: commands.put("ESCAPE", true); break;
 			case KeyEvent.VK_TAB: commands.put("TAB", true); break;
 			case KeyEvent.VK_E: commands.put("INTERACT", true); break;
+			case KeyEvent.VK_ENTER: commands.put("ENTER", true); break;
 		}
 
 	}
@@ -87,6 +89,7 @@ public class Controller implements GameController{
 			case KeyEvent.VK_ESCAPE: commands.put("ESCAPE", false); break;
 			case KeyEvent.VK_TAB: commands.put("TAB", false); break;
 			case KeyEvent.VK_E: commands.put("INTERACT", false); break;
+			case KeyEvent.VK_ENTER: commands.put("ENTER", false); break;
 		}
 
 	}

@@ -1,8 +1,11 @@
 package com.keyboards.main;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.Collections;
 import java.util.Comparator;
@@ -19,6 +22,8 @@ import java.awt.BasicStroke;
 public class Painter implements GamePainter {
 	
 	protected RunGame game;
+	Font font = new Font("Arial", Font.BOLD, 20);
+	Rectangle screen = new Rectangle(0, 0, Global.SCREEN_WIDTH, Global.SCREEN_HEIGHT);
 
 	// strok with a width of 2, normal cap and join
     private final Stroke tileStroke = new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL);
@@ -54,6 +59,51 @@ public class Painter implements GamePainter {
         g.setStroke(oldStroke);
     }
 
+	public void drawCenteredString(Graphics2D g, String text, Rectangle rect, Font font) {
+		// Get the FontMetrics
+		FontMetrics metrics = g.getFontMetrics(font);
+		// Determine the X coordinate for the text
+		int x = rect.x + (rect.width - metrics.stringWidth(text)) / 2;
+		// Determine the Y coordinate for the text (note we add the ascent, as in java 2d 0 is top of the screen)
+		int y = rect.y + ((rect.height - metrics.getHeight()) / 2) + metrics.getAscent();
+		// Set the font
+		g.setFont(font);
+		// Draw the String
+		g.drawString(text, x, y);
+	}
+
+	public void drawStartScreen(Graphics2D g) {
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, Global.SCREEN_WIDTH, Global.SCREEN_HEIGHT);
+		g.setColor(Color.WHITE);
+		// draw "Press Enter to start" in the middle of the screen
+		drawCenteredString(g, "Press Enter to start", screen, font);
+	}
+
+	public void drawWiningScreen(Graphics2D g) {
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, Global.SCREEN_WIDTH, Global.SCREEN_HEIGHT);
+		g.setColor(Color.WHITE);
+		// draw "You win!" in the middle of the screen
+		drawCenteredString(g, "You win!", screen, font);
+	}
+
+	public void drawGameOverScreen(Graphics2D g) {
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, Global.SCREEN_WIDTH, Global.SCREEN_HEIGHT);
+		g.setColor(Color.WHITE);
+		// draw "Game Over !" in the middle of the screen
+		drawCenteredString(g, "Game Over !", screen, font);
+	}
+
+	public void drawPauseScreen(Graphics2D g) {
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, Global.SCREEN_WIDTH, Global.SCREEN_HEIGHT);
+		g.setColor(Color.WHITE);
+		// draw "Pause (press ESC to resume)" in the middle of the screen
+		drawCenteredString(g, "Pause (press ESC to resume)", screen, font);
+	}
+
 	/**
 	 * methode  redefinie de Afficheur retourne une image du jeu
 	 */
@@ -61,11 +111,11 @@ public class Painter implements GamePainter {
 	public void draw(BufferedImage im) {
 		Graphics2D g = (Graphics2D) im.getGraphics();
 
-		// draw grid for tests
-        drawGrid(g, game.player.worldPosition, game.player.screenPosition);
-
 		// draw the tiles
 		game.tileManager.draw(g, game.player.worldPosition, game.player.screenPosition);
+		
+		// draw grid for tests
+        // drawGrid(g, game.player.worldPosition, game.player.screenPosition);
 		
 		// sort the entities by y position to draw them in the right order
 		Collections.sort(game.entities, new Comparator<Entity>() {
@@ -105,10 +155,26 @@ public class Painter implements GamePainter {
 			}
 		}
 
-		// if the game is paused, draw a black rectangle over the screen
+		if (!game.isStarted) {
+			drawStartScreen(g);
+			// System.out.println("Drawn start screen");
+		}
+
 		if (game.isPaused) {
-			g.setColor(new Color(0, 0, 0, 150));
-			g.fillRect(0, 0, Global.SCREEN_WIDTH, Global.SCREEN_HEIGHT);
+			drawPauseScreen(g);
+			// System.out.println("Drawn pause screen");
+		}
+
+		if (game.isGameOver) {
+			drawGameOverScreen(g);
+			// System.out.println("Drawn game over screen");
+			this.game.isDone = true;
+		}
+
+		if (game.isFinished) {
+			drawWiningScreen(g);
+			// System.out.println("Drawn wining screen");
+			this.game.isDone = true;
 		}
 	}
 

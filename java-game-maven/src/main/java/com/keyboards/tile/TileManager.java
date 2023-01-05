@@ -28,6 +28,7 @@ public class TileManager {
 	Color backgroundColor;
 
 	Sound ambientSound;
+	Sound stepSound;
 
 	public TileManager(String mapsJsonFilePAth, int mapIndex) {
 		try {
@@ -79,6 +80,7 @@ public class TileManager {
 		JSONObject map = (JSONObject) maps.get(mapIndex);
 
 		ambientSound = new Sound((String) map.get("ambientSound"));
+		stepSound = new Sound((String) map.get("stepSound"));
 		
 		loadTilesImages(new SpriteSheet((String) map.get("spriteSheet"), 16, 16));
 		backgroundColor = Sprite.HexToColor((String) map.get("backgroundColorHex"));
@@ -138,6 +140,12 @@ public class TileManager {
 
 	}
 
+	public void playStepSound() {
+		if (stepSound != null) {
+			stepSound.play();
+		}
+	}
+
 	public void loopAmbientSound() {
 		if (ambientSound != null) {
 			ambientSound.loop();
@@ -148,6 +156,11 @@ public class TileManager {
 		if (ambientSound != null) {
 			ambientSound.stop();
 		}
+	}
+
+	public void stopSounds() {
+		ambientSound.stop();
+		stepSound.stop();
 	}
 
 	public void draw(Graphics2D g, Point playerWorldPos, Point playerScreenPos) {

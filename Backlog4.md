@@ -51,10 +51,16 @@
 - Nous avons réparti les tâches mais nous nous sommes entraidés afin que tout soit terminé à temps.
 - Les vacances nous ont permis d'avoir des horaires de réunions plus flexibles, ce qui a simplifié l'organisation.
 
+## Diagramme de classes final
+
 ![Diagramme de classes final](images/ClassDiagramSprint4-final.png)
 
-![Diagramme de séquences evolve final](images/SequenceDiagramSprint4-evolve-final.png)
+## Diagramme de séquence final
 
-![Diagramme de séquences main final](images/SequenceDiagramSprint4-main-final.png)
+**Fonctionalitée launch :**
 
-  
+![Diagramme de séquences main final](images/SequenceDiagramSprint4-main-final.jpg)
+
+**Fonctionalitée evolve :**
+
+![Diagramme de séquences evolve final](images/SequenceDiagramSprint4-evolve-final.jpg)

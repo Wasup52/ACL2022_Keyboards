@@ -98,7 +98,7 @@ public class UI {
 		int x = WIDTH_OFFSET;
 		int y = HEIGHT_OFFSET;
 				
-		for (int i = 1; i <= player.maxHealth/2; i++) {
+		for (int i = 1; i <= (player.maxHealth + player.bouclier)/2 ; i++) {
 			if (player.health >= 2*i) {
 				drawFullHeart(g, x, y);
 			} else if (player.health >= 2*i-1) {
@@ -114,5 +114,8 @@ public class UI {
 				y += spriteHeight + HEIGHT_SPACING;
 			}
 		}
+
+		int maxHealth = player.maxHealth + player.bouclier;
+		System.out.println("Player life: " + player.health + "/" + maxHealth);
 	}
 }

@@ -14,28 +14,27 @@ public class Life_potion extends Item {
 	Sound drinkingSound;
 	public Life_potion(int col, int row, Tile[][] mapTiles, boolean isInInventory) {
 		super(col, row, mapTiles, isInInventory);
-		this.skillIncrease = 1;
+		this.skillIncrease = 2;
 	}
 	
 	public Life_potion (Tile[][] mapTiles, float distance_min, Player p, boolean isInInventory) {
 		super(mapTiles, distance_min, p, isInInventory);
-		this.skillIncrease = 1;
+		this.skillIncrease = 2;
 	}
 	public void playDrinkingSound() {
 		drinkingSound.play();
 	}
 
 	public void use(Player p) {
-		p.health += this.skillIncrease;
-		pl=p;
 		utilise=1;
-		if (pl.health + this.skillIncrease<=pl.maxHealth+pl.bouclier) {
-			pl.health += this.skillIncrease;
-		}
-		if(pl.health + this.skillIncrease>pl.maxHealth+pl.bouclier) {
-			pl.health=pl.maxHealth+pl.bouclier;
+		System.out.println("before health = " + p.health);
+		if (p.health + this.skillIncrease <= p.maxHealth + p.bouclier) {
+			p.health += this.skillIncrease;
+		} else {
+			p.health = p.maxHealth + p.bouclier;
 			
 		}
+		System.out.println("after health = " + p.health);
 		System.out.println("used " + this.getClass().getSimpleName());
 		playDrinkingSound();
 	}

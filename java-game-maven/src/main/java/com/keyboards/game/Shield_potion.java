@@ -14,12 +14,12 @@ public class Shield_potion extends Item {
 	Sound drinkingSound;
 	public Shield_potion(int col, int row, Tile[][] mapTiles, boolean isInInventory) {
 		super(col, row, mapTiles, isInInventory);
-		this.skillIncrease = 1;
+		this.skillIncrease = 2;
 	}
 	
 	public Shield_potion (Tile[][] mapTiles, float distance_min, Player p, boolean isInInventory) {
 		super(mapTiles, distance_min, p, isInInventory);
-		this.skillIncrease = 1;
+		this.skillIncrease = 2;
 	}
 
 	public void playDrinkingSound() {
@@ -27,7 +27,6 @@ public class Shield_potion extends Item {
 	}
 	public void use(Player p) {
 		p.bouclier += this.skillIncrease;
-		pl=p;
 		utilise=1;
 		
 		System.out.println("used " + this.getClass().getSimpleName());
